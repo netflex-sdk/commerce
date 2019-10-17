@@ -115,7 +115,19 @@ class Order extends NetflexObject
   {
     return Cart::factory($cart, $this)
       ->addHook('modified', function (Cart $cart) {
-        $this->__set('cart', $cart->jsonSerialize());
+        if (!$this->id) {
+          $this->save();
+        }
+
+        foreach ($cart->items as $item) {
+          if (!$item->id) {
+            $cart->addCartItem($item, $this->id);
+          } else {
+            $cart->updateCartItem($item, $this->id);
+          }
+        }
+
+        $this->refresh();
       });
   }
 
