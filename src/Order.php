@@ -40,6 +40,10 @@ class Order extends NetflexObject
   /** @var string */
   protected static $base_path = 'commerce/orders';
 
+  protected $defaults = [
+    'cart' => null
+  ];
+
   /**
    * @param string|int $id
    * @return int|null

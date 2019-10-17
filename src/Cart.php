@@ -3,6 +3,7 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\NetflexObject;
+use Netflex\Commerce\Traits\API\Cart as CartAPI;
 
 /**
  * @property-read CartItem[] $items
@@ -17,7 +18,11 @@ use Netflex\Support\NetflexObject;
  */
 class Cart extends NetflexObject
 {
-  use Traits\API\Cart;
+  use CartAPI;
+
+  protected $defaults = [
+    'items' => []
+  ];
 
   /** @var array */
   protected $readOnlyAttributes = [
