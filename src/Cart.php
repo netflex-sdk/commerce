@@ -6,6 +6,7 @@ use Netflex\Support\NetflexObject;
 use Netflex\Commerce\Traits\API\Cart as CartAPI;
 
 /**
+ * @property-read int $id
  * @property-read CartItem[] $items
  * @property-read ReservationItem[] $reservations
  * @property-read float $discount

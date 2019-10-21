@@ -20,7 +20,7 @@ use Netflex\Support\NetflexObject;
  * @property-read string $updated
  * @property-read float $entries_cost
  * @property-read float $entries_tax
- * @property-read float $enties_total
+ * @property-read float $entries_total
  * @property-read DiscountItem[] $discounts
  * @property Properties $properties
  * @property string $ip
@@ -72,7 +72,7 @@ class CartItem extends NetflexObject
    */
   public function getPropertiesAttribute($properties)
   {
-    return Properties::factory($properties)
+    return Properties::factory($properties, $this)
       ->addHook('modified', function ($items) {
         $this->__set('properties', $items->jsonSerialize());
       });
