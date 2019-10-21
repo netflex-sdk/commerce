@@ -120,14 +120,8 @@ class Order extends NetflexObject
         }
 
         foreach ($cart->items as $item) {
-          if (!$item->id) {
-            $cart->addCartItem($item, $this->id);
-          } else {
-            $cart->updateCartItem($item, $this->id);
-          }
+          $cart->addCartItem($item, $this->id);
         }
-
-        $this->refresh();
       });
   }
 
