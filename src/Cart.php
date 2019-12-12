@@ -43,7 +43,7 @@ class Cart extends NetflexObject
    */
   public function getItemsAttribute($items = [])
   {
-    return CartItemCollection::factory($items)
+    return CartItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
         $this->__set('items', $items->jsonSerialize());
       });

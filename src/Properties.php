@@ -9,10 +9,14 @@ class Properties extends NetflexObject
 {
   public function jsonSerialize()
   {
-    if (empty($this->attributes)) {
-      return null;
+    $attributes = empty($this->attributes) ? [] : $this->attributes;
+
+    foreach ($attributes as $key => $value) {
+      if (!is_string($value)) {
+        unset($attributes[$key]);
+      }
     }
 
-    return $this->attributes;
+    return $attributes;
   }
 }
