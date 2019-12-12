@@ -19,7 +19,7 @@ class Payments extends NetflexObject
    */
   public function getItemsAttribute(array $items)
   {
-    return PaymentItemCollection::factory($items)
+    return PaymentItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
         $this->__set('items', $items->jsonSerialize());
       });

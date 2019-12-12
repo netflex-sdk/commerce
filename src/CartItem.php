@@ -60,7 +60,7 @@ class CartItem extends NetflexObject
    */
   public function getDiscountsAttribute($discounts)
   {
-    return DiscountItemCollection::factory($discounts)
+    return DiscountItemCollection::factory($discounts, $this)
       ->addHook('modified', function ($items) {
         $this->__set('discounts', $items->jsonSerialize());
       });
