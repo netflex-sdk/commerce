@@ -73,8 +73,8 @@ class CartItem extends NetflexObject
   public function getPropertiesAttribute($properties)
   {
     return Properties::factory($properties, $this)
-      ->addHook('modified', function ($propeties) {
-        $this->__set('properties', $propeties->jsonSerialize());
+      ->addHook('modified', function ($properties) {
+        $this->__set('properties', $properties->jsonSerialize());
       });
   }
 
