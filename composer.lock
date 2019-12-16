@@ -46,16 +46,16 @@
         },
         {
             "name": "apility/netflex-support",
-            "version": "v1.0.5",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apility/netflex-support.git",
-                "reference": "3604ccdd9e222fcbdf7d930ee0b45f4138088977"
+                "reference": "76a4349269bce528554e067393ea2769e66d594c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apility/netflex-support/zipball/3604ccdd9e222fcbdf7d930ee0b45f4138088977",
-                "reference": "3604ccdd9e222fcbdf7d930ee0b45f4138088977",
+                "url": "https://api.github.com/repos/apility/netflex-support/zipball/76a4349269bce528554e067393ea2769e66d594c",
+                "reference": "76a4349269bce528554e067393ea2769e66d594c",
                 "shasum": ""
             },
             "require": {
@@ -82,7 +82,7 @@
                     "email": "thomas@apility.no"
                 }
             ],
-            "time": "2019-12-12T15:34:49+00:00"
+            "time": "2019-12-16T11:21:30+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
