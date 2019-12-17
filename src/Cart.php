@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\Cart as CartAPI;
 
 /**
@@ -17,7 +17,7 @@ use Netflex\Commerce\Traits\API\Cart as CartAPI;
  * @property-read int $count_lines
  * @property-read float $sub_total
  */
-class Cart extends NetflexObject
+class Cart extends ReactiveObject
 {
   use CartAPI;
 

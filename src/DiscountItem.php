@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property int $discount_id
@@ -13,7 +13,7 @@ use Netflex\Support\NetflexObject;
  * @property float $discount
  */
 
-class DiscountItem extends NetflexObject
+class DiscountItem extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = [

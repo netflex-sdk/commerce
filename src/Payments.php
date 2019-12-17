@@ -2,13 +2,13 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property-read float $total
  * @property PaymentItemCollection $items
  */
-class Payments extends NetflexObject
+class Payments extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = ['total', 'items'];

@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property string $data_alias
@@ -12,7 +12,7 @@ use Netflex\Support\NetflexObject;
  * @property-read string $created
  * @property-read string $updated
  */
-class DataItem extends NetflexObject
+class DataItem extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = [

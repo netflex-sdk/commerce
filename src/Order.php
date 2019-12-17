@@ -3,7 +3,7 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\Retrievable;
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
 
 /**
@@ -32,7 +32,7 @@ use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
  * @property-read LogItemCollection $log
  * @property-read Checkout[] $checkout
  */
-class Order extends NetflexObject
+class Order extends ReactiveObject
 {
   use OrdersAPI;
   use Retrievable;
