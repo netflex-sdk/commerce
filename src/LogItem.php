@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property int $id
@@ -15,7 +15,7 @@ use Netflex\Support\NetflexObject;
  * @property string $mail_sent_time
  * @property string $confirm_read
  */
-class LogItem extends NetflexObject
+class LogItem extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = [

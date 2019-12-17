@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property int $cart_item
@@ -11,7 +11,7 @@ use Netflex\Support\NetflexObject;
  * @property string $reservation_end
  * @property array|object $reservation_length
  */
-class ReservationItem extends NetflexObject
+class ReservationItem extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = [

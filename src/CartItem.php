@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property-read int $id
@@ -33,7 +33,7 @@ use Netflex\Support\NetflexObject;
  * @property float $original_entries_tax
  * @property float $original_entries_total
  */
-class CartItem extends NetflexObject
+class CartItem extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = [

@@ -3,9 +3,9 @@
 namespace Netflex\Commerce;
 
 use Exception;
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
-class Properties extends NetflexObject
+class Properties extends ReactiveObject
 {
   /** @var array */
   protected $readOnlyAttributes = [];

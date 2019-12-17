@@ -2,7 +2,7 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\NetflexObject;
+use Netflex\Support\ReactiveObject;
 
 /**
  * @property string $firstname
@@ -31,7 +31,7 @@ use Netflex\Support\NetflexObject;
  * @property string $user_agent
  * @property string $updated
  */
-class Checkout extends NetflexObject
+class Checkout extends ReactiveObject
 {
   /** @var array */
   protected $defaults = [
