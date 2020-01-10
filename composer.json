@@ -1,5 +1,5 @@
 {
-  "name": "apility/netflex-commerce",
+  "name": "netflex/commerce",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -14,8 +14,8 @@
     }
   },
   "require": {
-    "apility/netflex-api": "^1.0",
-    "apility/netflex-support": "^1.0"
+    "netflex/api": "^2.0",
+    "netflex/support": "^2.0"
   },
   "require-dev": {
     "vlucas/phpdotenv": "^3.6",
