@@ -2,16 +2,19 @@
 
 namespace Netflex\Commerce\Traits\API;
 
-/* use Exception; */
-
+use Exception;
 use Netflex\API;
 use Netflex\Commerce\Order;
 
-/* use Netflex\Commerce\Exceptions\OrderNotFoundException; */
-
 trait Orders
 {
-  public function save () {
+  /**
+   * @return $this
+   * @throws Exception
+   */
+  public function save()
+  {
+    // TODO: Should payload contain something here?
     $payload = [];
     $client = API::getClient();
 
@@ -19,16 +22,22 @@ trait Orders
       $this->attributes['id'] = $client
         ->post(trim(static::$base_path, '/'), $payload)
         ->order_id;
+
     } else {
       if (count($this->modified)) {
         $client->put(trim(static::$base_path, '/') . '/' . $this->id, $payload);
       }
     }
 
-    $this->refresh();
+    return $this->refresh();
   }
 
-  public function refresh () {
+  /**
+   * @return $this
+   * @throws Exception
+   */
+  public function refresh()
+  {
     $this->attributes = API::getClient()
       ->get(trim(static::$base_path, '/') . '/' . $this->id, true);
 
@@ -36,34 +45,74 @@ trait Orders
   }
 
   /**
-   * @param string $secret
-   * @return static
+   * @param string $key
+   * @return $this
    */
-  public static function retrieveBySecret($secret)
+  public function addToSession($key = 'netflex_cart')
   {
-    return new static(
-      API::getClient()
-        ->get(trim(static::$base_path, '/') . '/secret/' . $secret)
-    );
+    if (session_status() == PHP_SESSION_NONE) {
+      session_start();
+    }
+
+    $_SESSION[$key] = $this->secret;
+
+    return $this;
   }
 
-  public static function removeFromSession ($key = 'netflex_cart') {
+  /**
+   * @param string $key
+   * @return $this
+   */
+  public function removeFromSession($key = 'netflex_cart')
+  {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
 
     $_SESSION[$key] = null;
+
+    return $this;
   }
 
-  public static function addToSession (Order $order, $key = 'netflex_cart') {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
+  /**
+   * Creates empty order object based on orderData
+   *
+   * @param array $order
+   * @return Order
+   * @throws Exception
+   */
+  public static function create($order = [])
+  {
+    return static::retrieve(
+      API::getClient()
+        ->post(trim(static::$base_path, '/'), $order)
+        ->order_id
+    );
+  }
+
+  /**
+   * @param string $key
+   * @return Order
+   * @throws Exception
+   */
+  public static function retrieveBySessionOrCreate($key = 'netflex_cart')
+  {
+    $order = static::retrieveBySession($key);
+
+    if (empty($order->id)) {
+      $order->save()->addToSession();
     }
 
-    $_SESSION[$key] = $order->secret;
+    return $order;
   }
 
-  public static function retrieveBySession ($key = 'netflex_cart') {
+  /**
+   * @param string $key
+   * @return Order
+   * @throws Exception
+   */
+  public static function retrieveBySession($key = 'netflex_cart')
+  {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
@@ -76,17 +125,29 @@ trait Orders
   }
 
   /**
-   * Creates empty order object based on orderData
-   *
-   * @param array $order
-   * @return static
+   * @param string $secret
+   * @return Order
+   * @throws Exception
    */
-  public static function create($order = [])
+  public static function retrieveBySecret($secret)
   {
-    return static::retrieve(
+    return new static(
       API::getClient()
-        ->post(trim(static::$base_path, '/'), $order)
-        ->order_id
+        ->get(trim(static::$base_path, '/') . '/secret/' . $secret)
     );
   }
+
+  /**
+   * @param string $id
+   * @return Order
+   * @throws Exception
+   */
+  public static function retrieveByRegisterId($id)
+  {
+    return new static(
+      API::getClient()
+        ->get(trim(static::$base_path, '/') . '/register/' . $id)
+    );
+  }
+
 }
