@@ -30,6 +30,10 @@ trait CartItemAPI
     return $this;
   }
 
+  /**
+   * @param Order $order
+   * @throws Exception
+   */
   public function delete(Order $order)
   {
     API::getClient()
