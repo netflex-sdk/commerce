@@ -5,6 +5,7 @@ namespace Netflex\Commerce\Traits\API;
 use Exception;
 use Netflex\API;
 use Netflex\Commerce\CartItem;
+use Netflex\Commerce\Exceptions\OrderNotFoundException;
 use Netflex\Commerce\Order;
 
 trait Orders
@@ -84,7 +85,7 @@ trait Orders
       session_start();
     }
 
-    $_SESSION[$key] = null;
+    unset($_SESSION[$key]);
 
     return $this;
   }
@@ -115,6 +116,8 @@ trait Orders
   }
 
   /**
+   * If no session exist, it creates a new empty order in API with id and secret, and adds it to session.
+   *
    * @param string $key
    * @return static
    * @throws Exception
@@ -123,7 +126,7 @@ trait Orders
   {
     $order = static::retrieveBySession($key);
 
-    if (empty($order->id)) {
+    if (!$order->id) {
       $order->save()->addToSession();
     }
 
@@ -131,6 +134,9 @@ trait Orders
   }
 
   /**
+   * If no session exist, it creates a new empty order object WITHOUT id or secret.
+   * But; It makes shure session is set when order is saved.
+   *
    * @param string $key
    * @return static
    * @throws Exception
@@ -142,11 +148,19 @@ trait Orders
     }
 
     if (isset($_SESSION[$key])) {
-      return static::retrieveBySecret($_SESSION[$key]);
-    }
+      try {
+        $order = static::retrieveBySecret($_SESSION[$key]);
 
-    $order = new static();
-    $order->triedReceivedBySession = true;
+      } catch (OrderNotFoundException $e) {
+        $order = new static();
+        $order->removeFromSession();
+        $order->triedReceivedBySession = true;
+      }
+
+    } else {
+      $order = new static();
+      $order->triedReceivedBySession = true;
+    }
 
     return $order;
   }
@@ -154,27 +168,39 @@ trait Orders
   /**
    * @param string $secret
    * @return static
-   * @throws Exception
+   * @throws Exception|OrderNotFoundException
    */
   public static function retrieveBySecret($secret)
   {
-    return new static(
+    $order = new static(
       API::getClient()
         ->get(trim(static::$base_path, '/').'/secret/'.$secret)
     );
+
+    if (!$order->id) {
+      throw new OrderNotFoundException('Order not found with secret '.$secret);
+    }
+
+    return $order;
   }
 
   /**
    * @param string $id
    * @return static
-   * @throws Exception
+   * @throws Exception|OrderNotFoundException
    */
   public static function retrieveByRegisterId($id)
   {
-    return new static(
+    $order = new static(
       API::getClient()
         ->get(trim(static::$base_path, '/').'/register/'.$id)
     );
+
+    if (!$order->id) {
+      throw new OrderNotFoundException('Order not found with register id '.$id);
+    }
+
+    return $order;
   }
 
 }
