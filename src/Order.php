@@ -37,12 +37,13 @@ class Order extends ReactiveObject
   use OrdersAPI;
   use Retrievable;
 
-  /** @var string */
   protected static $base_path = 'commerce/orders';
 
   protected $defaults = [
     'cart' => null
   ];
+
+  protected $triedReceivedBySession = false;
 
   /**
    * @param string|int $id
@@ -108,20 +109,14 @@ class Order extends ReactiveObject
   }
 
   /**
-   * @param object|array|null $value
+   * @param object|array|null $cart
    * @return Cart
    */
   public function getCartAttribute($cart = [])
   {
     return Cart::factory($cart, $this)
       ->addHook('modified', function (Cart $cart) {
-        if (!$this->id) {
-          $this->save();
-        }
-
-        foreach ($cart->items as $item) {
-          $cart->addCartItem($item, $this->id);
-        }
+        $this->__set('cart', $cart->jsonSerialize());
       });
   }
 
