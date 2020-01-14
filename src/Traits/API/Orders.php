@@ -15,10 +15,10 @@ trait Orders
    */
   public function save()
   {
-
-    // TODO: Should payload contain something here?
-
     $payload = [];
+    foreach ($this->modified as $modifiedKey) {
+      $payload[$modifiedKey] = $this->{$modifiedKey};
+    }
 
     // Post new
     if (!$this->id) {
@@ -36,11 +36,13 @@ trait Orders
       // Put updates
       if (count($this->modified)) {
         API::getClient()
-          ->put(trim(static::$base_path, '/') . '/' . $this->id, $payload);
+          ->put(trim(static::$base_path, '/').'/'.$this->id, $payload);
 
         $this->refresh();
       }
     }
+
+    $this->modified = [];
 
     return $this;
   }
@@ -52,7 +54,7 @@ trait Orders
   public function refresh()
   {
     $this->attributes = API::getClient()
-      ->get(trim(static::$base_path, '/') . '/' . $this->id, true);
+      ->get(trim(static::$base_path, '/').'/'.$this->id, true);
 
     return $this;
   }
@@ -100,7 +102,7 @@ trait Orders
    * Creates empty order object based on orderData
    *
    * @param array $order
-   * @return Order
+   * @return static
    * @throws Exception
    */
   public static function create($order = [])
@@ -114,7 +116,7 @@ trait Orders
 
   /**
    * @param string $key
-   * @return Order
+   * @return static
    * @throws Exception
    */
   public static function retrieveBySessionOrCreate($key = 'netflex_cart')
@@ -130,7 +132,7 @@ trait Orders
 
   /**
    * @param string $key
-   * @return Order
+   * @return static
    * @throws Exception
    */
   public static function retrieveBySession($key = 'netflex_cart')
@@ -151,27 +153,27 @@ trait Orders
 
   /**
    * @param string $secret
-   * @return Order
+   * @return static
    * @throws Exception
    */
   public static function retrieveBySecret($secret)
   {
     return new static(
       API::getClient()
-        ->get(trim(static::$base_path, '/') . '/secret/' . $secret)
+        ->get(trim(static::$base_path, '/').'/secret/'.$secret)
     );
   }
 
   /**
    * @param string $id
-   * @return Order
+   * @return static
    * @throws Exception
    */
   public static function retrieveByRegisterId($id)
   {
     return new static(
       API::getClient()
-        ->get(trim(static::$base_path, '/') . '/register/' . $id)
+        ->get(trim(static::$base_path, '/').'/register/'.$id)
     );
   }
 
