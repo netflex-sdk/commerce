@@ -38,6 +38,8 @@ class Order extends ReactiveObject
   use OrdersAPI;
   use Retrievable;
 
+  public static $sessionKey = 'netflex_cart';
+
   protected static $base_path = 'commerce/orders';
 
   protected $defaults = [

@@ -61,31 +61,29 @@ trait Orders
   }
 
   /**
-   * @param string $key
    * @return static
    */
-  public function addToSession($key = 'netflex_cart')
+  public function addToSession()
   {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
 
-    $_SESSION[$key] = $this->secret;
+    $_SESSION[static::$sessionKey] = $this->secret;
 
     return $this;
   }
 
   /**
-   * @param string $key
    * @return static
    */
-  public function removeFromSession($key = 'netflex_cart')
+  public function removeFromSession()
   {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
 
-    unset($_SESSION[$key]);
+    unset($_SESSION[static::$sessionKey]);
 
     return $this;
   }
@@ -118,11 +116,11 @@ trait Orders
   /**
    * If no session exist, it creates a new empty order in API with id and secret, and adds it to session.
    *
-   * @param string $key
+   * @param string|null $key
    * @return static
    * @throws Exception
    */
-  public static function retrieveBySessionOrCreate($key = 'netflex_cart')
+  public static function retrieveBySessionOrCreate($key = null)
   {
     $order = static::retrieveBySession($key);
 
@@ -137,19 +135,23 @@ trait Orders
    * If no session exist, it creates a new empty order object WITHOUT id or secret.
    * But; It makes shure session is set when order is saved.
    *
-   * @param string $key
+   * @param string|null $key
    * @return static
    * @throws Exception
    */
-  public static function retrieveBySession($key = 'netflex_cart')
+  public static function retrieveBySession($key = null)
   {
     if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
 
-    if (isset($_SESSION[$key])) {
+    if ($key) {
+      static::$sessionKey = $key;
+    }
+
+    if (isset($_SESSION[static::$sessionKey])) {
       try {
-        $order = static::retrieveBySecret($_SESSION[$key]);
+        $order = static::retrieveBySecret($_SESSION[static::$sessionKey]);
 
       } catch (OrderNotFoundException $e) {
         $order = new static();
