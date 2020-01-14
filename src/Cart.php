@@ -22,10 +22,17 @@ class Cart extends ReactiveObject
   use CartAPI;
 
   protected $defaults = [
-    'items' => []
+    'sub_total' => 0,
+    'discount' => 0,
+    'tax' => 0,
+    'total' => 0,
+    'weight' => 0,
+    'count_items' => 0,
+    'count_lines' => 0,
+    'items' => [],
+    'reservations' => [],
   ];
 
-  /** @var array */
   protected $readOnlyAttributes = [
     'sub_total',
     'discount',

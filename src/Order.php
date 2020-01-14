@@ -31,6 +31,7 @@ use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
  * @property-read Data[] $data
  * @property-read LogItemCollection $log
  * @property-read Checkout[] $checkout
+ * @property-read DiscountItemCollection $discounts
  */
 class Order extends ReactiveObject
 {
@@ -40,7 +41,33 @@ class Order extends ReactiveObject
   protected static $base_path = 'commerce/orders';
 
   protected $defaults = [
-    'cart' => null
+    'id' => null,
+    'created' => null,
+    'updated' => null,
+    'status' => null,
+    'type' => null,
+    'secret' => null,
+    'ip' => null,
+    'user_agent' => null,
+    'customer_id' => null,
+    'customer_code' => null,
+    'customer_mail' => null,
+    'customer_phone' => null,
+    'payment_method' => null,
+    'currency' => null,
+    'order_cost' => 0,
+    'order_total' => 0,
+    'order_tax' => 0,
+    'abandoned' => false,
+    'abandoned_reminder_sent' => false,
+    'abandoned_reminder_mail' => null,
+    'register' => null,
+    'data' => null,
+    'cart' => null,
+    'log' => null,
+    'checkout' => null,
+    'payments' => null,
+    'discounts' => null,
   ];
 
   protected $triedReceivedBySession = false;
@@ -160,7 +187,7 @@ class Order extends ReactiveObject
    * @param array|null $discounts
    * @return DiscountItemCollection
    */
-  public function getDiscountsAttribute(array $discounts = [])
+  public function getDiscountsAttribute($discounts = [])
   {
     return DiscountItemCollection::factory($discounts, $this)
       ->addHook('modified', function (DiscountItemCollection $discounts) {
@@ -172,7 +199,7 @@ class Order extends ReactiveObject
    * @param array|null $log
    * @return LogItemCollection
    */
-  public function getLogAttribute(array $log = [])
+  public function getLogAttribute($log = [])
   {
     return LogItemCollection::factory($log)
       ->addHook('modified', function (LogItemCollection $log) {
