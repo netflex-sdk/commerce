@@ -3,6 +3,7 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\ReactiveObject;
+use Netflex\Commerce\Traits\API\LogItemAPI;
 
 /**
  * @property int $id
@@ -17,13 +18,13 @@ use Netflex\Support\ReactiveObject;
  */
 class LogItem extends ReactiveObject
 {
-  /** @var array */
+  use LogItemAPI;
+
   protected $readOnlyAttributes = [
     'id',
     'updated'
   ];
 
-  /** @var array */
   protected $defaults = [
     'type' => null,
     'msg' => null
