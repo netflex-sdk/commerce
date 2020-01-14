@@ -1,5 +1,6 @@
 {
   "name": "netflex/commerce",
+  "description": "Netflex Commerce library",
   "type": "library",
   "license": "MIT",
   "authors": [
