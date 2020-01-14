@@ -2,7 +2,6 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\Retrievable;
 use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
 
@@ -36,7 +35,6 @@ use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
 class Order extends ReactiveObject
 {
   use OrdersAPI;
-  use Retrievable;
 
   public static $sessionKey = 'netflex_cart';
 

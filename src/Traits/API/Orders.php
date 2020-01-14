@@ -205,4 +205,23 @@ trait Orders
     return $order;
   }
 
+  /**
+   * @param string $id
+   * @return static
+   * @throws Exception|OrderNotFoundException
+   */
+  public static function retrieve($id)
+  {
+    $order = new static(
+      API::getClient()
+        ->get(trim(static::$base_path, '/').'/'.$id)
+    );
+
+    if (!$order->id) {
+      throw new OrderNotFoundException('Order not found with id '.$id);
+    }
+
+    return $order;
+  }
+
 }
