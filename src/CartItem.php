@@ -3,6 +3,7 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\ReactiveObject;
+use Netflex\Commerce\Traits\API\CartItemAPI;
 
 /**
  * @property-read int $id
@@ -35,6 +36,8 @@ use Netflex\Support\ReactiveObject;
  */
 class CartItem extends ReactiveObject
 {
+  use CartItemAPI;
+
   /** @var array */
   protected $readOnlyAttributes = [
     'id',

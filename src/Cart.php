@@ -3,7 +3,6 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\ReactiveObject;
-use Netflex\Commerce\Traits\API\Cart as CartAPI;
 
 /**
  * @property-read int $id
@@ -19,8 +18,6 @@ use Netflex\Commerce\Traits\API\Cart as CartAPI;
  */
 class Cart extends ReactiveObject
 {
-  use CartAPI;
-
   protected $defaults = [
     'sub_total' => 0,
     'discount' => 0,

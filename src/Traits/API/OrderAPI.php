@@ -4,12 +4,12 @@ namespace Netflex\Commerce\Traits\API;
 
 use Exception;
 use Netflex\API;
-use Netflex\Commerce\CartItem;
 use Netflex\Commerce\Exceptions\OrderNotFoundException;
-use Netflex\Commerce\Order;
 
-trait Orders
+trait OrderAPI
 {
+  use OrderAddItemAPI;
+
   /**
    * @return static
    * @throws Exception
@@ -86,15 +86,6 @@ trait Orders
     unset($_SESSION[static::$sessionKey]);
 
     return $this;
-  }
-
-  /**
-   * @param array $item
-   * @return static
-   */
-  public function addCartItem($item = [])
-  {
-    return $this->cart->addCartItem(CartItem::factory($item));
   }
 
   /**
