@@ -11,14 +11,16 @@ trait OrderAPI
   use OrderAddItemAPI;
 
   /**
+   * @param array $payload
    * @return static
    * @throws Exception
    */
-  public function save()
+  public function save($payload = [])
   {
-    $payload = [];
-    foreach ($this->modified as $modifiedKey) {
-      $payload[$modifiedKey] = $this->{$modifiedKey};
+    if (empty($payload)) {
+      foreach ($this->modified as $modifiedKey) {
+        $payload[$modifiedKey] = $this->{$modifiedKey};
+      }
     }
 
     // Post new
@@ -35,7 +37,7 @@ trait OrderAPI
 
     } else {
       // Put updates
-      if (count($this->modified)) {
+      if (!empty($payload)) {
         API::getClient()
           ->put(trim(static::$base_path, '/').'/'.$this->id, $payload);
 
@@ -84,6 +86,19 @@ trait OrderAPI
     }
 
     unset($_SESSION[static::$sessionKey]);
+
+    return $this;
+  }
+
+  /**
+   * @param array $payload
+   * @return static
+   * @throws Exception
+   */
+  public function checkout($payload = [])
+  {
+    API::getClient()
+      ->put(trim(static::$base_path, '/').'/'.$this->id.'/checkout', $payload);
 
     return $this;
   }
