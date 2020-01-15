@@ -206,4 +206,13 @@ class Order extends ReactiveObject
         $this->__set('log', $log->jsonSerialize());
       });
   }
+
+  /**
+   * Return the current date and time, formatted as it is stored in the database
+   * @return string
+   */
+  public static function dateTimeNow()
+  {
+    return date('Y-m-d H:i:s');
+  }
 }
