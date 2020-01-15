@@ -11,6 +11,16 @@ trait OrderAPI
   use OrderAddAPI;
 
   /**
+   * @param $status
+   * @return static
+   * @throws Exception
+   */
+  public function saveStatus($status)
+  {
+    return $this->save(['status' => $status]);
+  }
+
+  /**
    * @param array $payload
    * @return static
    * @throws Exception
@@ -24,7 +34,7 @@ trait OrderAPI
     // Post new
     if (!$this->id) {
       $this->attributes['id'] = API::getClient()
-        ->post(static::basePath(), $payload)
+        ->post(trim(static::$base_path, '/'), $payload)
         ->order_id;
 
       $this->refresh();
@@ -86,6 +96,19 @@ trait OrderAPI
     unset($_SESSION[static::$sessionKey]);
 
     return $this;
+  }
+
+  /**
+   * Same as checkout, but set checkout_end date in payload for you
+   * @param array $payload
+   * @return static
+   * @throws Exception
+   */
+  public function checkoutEnd($payload = [])
+  {
+    $payload['checkout_end'] = static::dateTimeNow();
+
+    return $this->checkout($payload);
   }
 
   /**
