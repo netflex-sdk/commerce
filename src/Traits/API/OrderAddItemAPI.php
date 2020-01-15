@@ -4,7 +4,6 @@ namespace Netflex\Commerce\Traits\API;
 
 use Exception;
 use Netflex\API;
-use Netflex\Commerce\CartItem;
 
 trait OrderAddItemAPI
 {
@@ -13,7 +12,7 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addCartItem($item)
+  public function addCart($item)
   {
     if (!$this->id) {
       $this->save();
@@ -30,7 +29,7 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addPaymentItem($item)
+  public function addPayment($item)
   {
     if (!$this->id) {
       $this->save();
@@ -47,9 +46,9 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addLogItemInformation($item)
+  public function addLogInfo($item)
   {
-    return $this->addLogItem($item, 'n');
+    return $this->addLog($item, 'n');
   }
 
   /**
@@ -57,9 +56,9 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addLogItemWarning($item)
+  public function addLogWarning($item)
   {
-    return $this->addLogItem($item, 'w');
+    return $this->addLog($item, 'w');
   }
 
   /**
@@ -67,9 +66,9 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addLogItemDanger($item)
+  public function addLogDanger($item)
   {
-    return $this->addLogItem($item, 'd');
+    return $this->addLog($item, 'd');
   }
 
   /**
@@ -77,9 +76,9 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addLogItemSuccess($item)
+  public function addLogSuccess($item)
   {
-    return $this->addLogItem($item, 's');
+    return $this->addLog($item, 's');
   }
 
   /**
@@ -88,7 +87,7 @@ trait OrderAddItemAPI
    * @return static
    * @throws Exception
    */
-  public function addLogItem($item, $type = 'i')
+  public function addLog($item, $type = 'i')
   {
     if (!$this->id) {
       $this->save();
