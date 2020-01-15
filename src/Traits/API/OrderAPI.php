@@ -24,7 +24,7 @@ trait OrderAPI
     // Post new
     if (!$this->id) {
       $this->attributes['id'] = API::getClient()
-        ->post(trim(static::$base_path, '/'), $payload)
+        ->post(static::basePath(), $payload)
         ->order_id;
 
       $this->refresh();
@@ -37,7 +37,7 @@ trait OrderAPI
       // Put updates
       if (!empty($payload)) {
         API::getClient()
-          ->put(trim(static::$base_path, '/').'/'.$this->id, $payload);
+          ->put(static::basePath().$this->id, $payload);
 
         $this->refresh();
       }
@@ -55,7 +55,7 @@ trait OrderAPI
   public function refresh()
   {
     $this->attributes = API::getClient()
-      ->get(trim(static::$base_path, '/').'/'.$this->id, true);
+      ->get(static::basePath().$this->id, true);
 
     return $this;
   }
@@ -96,7 +96,7 @@ trait OrderAPI
   public function checkout($payload = [])
   {
     API::getClient()
-      ->put(trim(static::$base_path, '/').'/'.$this->id.'/checkout', $payload);
+      ->put(static::basePath().$this->id.'/checkout', $payload);
 
     return $this;
   }
@@ -108,7 +108,7 @@ trait OrderAPI
   public function register()
   {
     API::getClient()
-      ->put(trim(static::$base_path, '/').'/'.$this->id.'/register');
+      ->put(static::basePath().$this->id.'/register');
 
     return $this;
   }
@@ -124,7 +124,7 @@ trait OrderAPI
   {
     return static::retrieve(
       API::getClient()
-        ->post(trim(static::$base_path, '/'), $order)
+        ->post(static::basePath(), $order)
         ->order_id
     );
   }
@@ -192,7 +192,7 @@ trait OrderAPI
   {
     $order = new static(
       API::getClient()
-        ->get(trim(static::$base_path, '/').'/secret/'.$secret)
+        ->get(static::basePath().'secret/'.$secret)
     );
 
     if (!$order->id) {
@@ -211,7 +211,7 @@ trait OrderAPI
   {
     $order = new static(
       API::getClient()
-        ->get(trim(static::$base_path, '/').'/register/'.$id)
+        ->get(static::basePath().'register/'.$id)
     );
 
     if (!$order->id) {
@@ -230,7 +230,7 @@ trait OrderAPI
   {
     $order = new static(
       API::getClient()
-        ->get(trim(static::$base_path, '/').'/'.$id)
+        ->get(static::basePath().$id)
     );
 
     if (!$order->id) {

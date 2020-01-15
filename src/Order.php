@@ -215,4 +215,12 @@ class Order extends ReactiveObject
   {
     return date('Y-m-d H:i:s');
   }
+
+  /**
+   * @return string
+   */
+  public static function basePath()
+  {
+    return trim(static::$base_path, '/').'/';
+  }
 }

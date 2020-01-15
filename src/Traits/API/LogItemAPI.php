@@ -4,6 +4,7 @@ namespace Netflex\Commerce\Traits\API;
 
 use Exception;
 use Netflex\API;
+use Netflex\Commerce\Order;
 
 trait LogItemAPI
 {
@@ -20,7 +21,7 @@ trait LogItemAPI
 
     if (!empty($updates)) {
       API::getClient()
-        ->put('commerce/orders/'.$this->order_id.'/log/'.$this->id, $updates);
+        ->put(Order::basePath().$this->order_id.'/log/'.$this->id, $updates);
     }
 
     $this->modified = [];
@@ -34,6 +35,6 @@ trait LogItemAPI
   public function delete()
   {
     API::getClient()
-      ->delete('commerce/orders/'.$this->order_id.'/log/'.$this->id);
+      ->delete(Order::basePath().$this->order_id.'/log/'.$this->id);
   }
 }

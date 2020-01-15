@@ -20,7 +20,24 @@ trait OrderAddItemAPI
     }
 
     API::getClient()
-      ->post('commerce/orders/'.$this->id.'/cart', $item);
+      ->post(static::basePath().$this->id.'/cart', $item);
+
+    return $this;
+  }
+
+  /**
+   * @param array $item
+   * @return static
+   * @throws Exception
+   */
+  public function addPaymentItem($item)
+  {
+    if (!$this->id) {
+      $this->save();
+    }
+
+    API::getClient()
+      ->post(static::basePath().$this->id.'/payment', $item);
 
     return $this;
   }
@@ -84,7 +101,7 @@ trait OrderAddItemAPI
     $item['type'] = $item['type'] ?? $type;
 
     API::getClient()
-      ->post(trim(static::$base_path, '/').'/'.$this->id.'/log', $item);
+      ->post(static::basePath().$this->id.'/log', $item);
 
     return $this;
   }

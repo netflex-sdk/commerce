@@ -2,11 +2,13 @@
 
 namespace Netflex\Commerce;
 
+use Netflex\Commerce\Traits\API\PaymentItemAPI;
 use Netflex\Support\ReactiveObject;
 
 class PaymentItem extends ReactiveObject
 {
-  /** @var array */
+  use PaymentItemAPI;
+
   protected $readOnlyAttributes = [
     'id'
   ];

@@ -30,12 +30,8 @@ class LogItem extends ReactiveObject
     'msg' => null
   ];
 
-  /**
-   * @param string|int $orderId
-   * @return int
-   */
-  public function getOrderIdAttribute($orderId)
+  public function getOrderIdAttribute($value)
   {
-    return (int) $orderId;
+    return (int) $value;
   }
 }
