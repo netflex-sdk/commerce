@@ -5,7 +5,7 @@ namespace Netflex\Commerce\Traits\API;
 use Exception;
 use Netflex\API;
 
-trait OrderAddItemAPI
+trait OrderAddAPI
 {
   /**
    * @param array $item
@@ -37,6 +37,34 @@ trait OrderAddItemAPI
 
     API::getClient()
       ->post(static::basePath().$this->id.'/payment', $item);
+
+    return $this;
+  }
+
+  /**
+   * @param string $key
+   * @param string $value
+   * @param string $label
+   * @return static
+   * @throws Exception
+   */
+  public function addData($key, $value, $label = '')
+  {
+    if (!$this->id) {
+      $this->save();
+    }
+
+    $item = [
+      'data_alias' => $key,
+      'value' => $value
+    ];
+
+    if (!empty($label)) {
+      $item['label'] = $label;
+    }
+
+    API::getClient()
+      ->put(static::basePath().$this->id.'/data', $item);
 
     return $this;
   }

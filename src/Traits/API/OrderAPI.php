@@ -8,7 +8,7 @@ use Netflex\Commerce\Exceptions\OrderNotFoundException;
 
 trait OrderAPI
 {
-  use OrderAddItemAPI;
+  use OrderAddAPI;
 
   /**
    * @param array $payload
