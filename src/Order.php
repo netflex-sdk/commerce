@@ -132,7 +132,7 @@ class Order extends ReactiveObject
    */
   public function getRegisterAttribute($register)
   {
-    return Register::factory($register);
+    return Register::factory($register, $this);
   }
 
   /**
@@ -153,7 +153,7 @@ class Order extends ReactiveObject
    */
   public function getDataAttribute($data = [])
   {
-    return Data::factory($data)
+    return Data::factory($data, $this)
       ->addHook('modified', function (Data $data) {
         $this->__set('data', $data->jsonSerialize());
       });
@@ -165,7 +165,7 @@ class Order extends ReactiveObject
    */
   public function getPaymentsAttribute($payments = null)
   {
-    return Payments::factory($payments)
+    return Payments::factory($payments, $this)
       ->addHook('modified', function (Payments $payments) {
         $this->__set('payments', $payments->jsonSerialize());
       });
@@ -201,7 +201,7 @@ class Order extends ReactiveObject
    */
   public function getLogAttribute($log = [])
   {
-    return LogItemCollection::factory($log)
+    return LogItemCollection::factory($log, $this)
       ->addHook('modified', function (LogItemCollection $log) {
         $this->__set('log', $log->jsonSerialize());
       });

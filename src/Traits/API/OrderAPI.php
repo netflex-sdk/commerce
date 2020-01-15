@@ -17,10 +17,8 @@ trait OrderAPI
    */
   public function save($payload = [])
   {
-    if (empty($payload)) {
-      foreach ($this->modified as $modifiedKey) {
-        $payload[$modifiedKey] = $this->{$modifiedKey};
-      }
+    foreach ($this->modified as $modifiedKey) {
+      $payload[$modifiedKey] = $this->{$modifiedKey};
     }
 
     // Post new

@@ -47,6 +47,15 @@ class Cart extends ReactiveObject
    */
   public function getItemsAttribute($items = [])
   {
+    $items = array_map(function ($item) {
+      if (is_array($item)) {
+        $item['order_id'] = $this->parent->id;
+      } else {
+        $item->order_id = $this->parent->id;
+      }
+      return $item;
+    }, $items);
+
     return CartItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
         $this->__set('items', $items->jsonSerialize());
@@ -59,7 +68,7 @@ class Cart extends ReactiveObject
    */
   public function getReservationsAttribute($items = [])
   {
-    return ReservationItemCollection::factory($items)
+    return ReservationItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
         $this->__set('reservations', $items->jsonSerialize());
       });

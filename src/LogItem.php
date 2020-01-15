@@ -29,4 +29,13 @@ class LogItem extends ReactiveObject
     'type' => null,
     'msg' => null
   ];
+
+  /**
+   * @param string|int $orderId
+   * @return int
+   */
+  public function getOrderIdAttribute($orderId)
+  {
+    return (int) $orderId;
+  }
 }
