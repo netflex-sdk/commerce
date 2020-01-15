@@ -102,6 +102,18 @@ trait OrderAPI
   }
 
   /**
+   * @return static
+   * @throws Exception
+   */
+  public function register()
+  {
+    API::getClient()
+      ->put(trim(static::$base_path, '/').'/'.$this->id.'/register');
+
+    return $this;
+  }
+
+  /**
    * Creates empty order object based on orderData
    *
    * @param array $order
