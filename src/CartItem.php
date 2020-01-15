@@ -26,7 +26,7 @@ use Netflex\Commerce\Traits\API\CartItemAPI;
  * @property Properties $properties
  * @property string $ip
  * @property string $user_agent
- * @property bool $changed_in_cart
+ * @property int $changed_in_cart
  * @property string $reservation_start
  * @property string $reservation_end
  * @property string $entries_comments
@@ -38,7 +38,6 @@ class CartItem extends ReactiveObject
 {
   use CartItemAPI;
 
-  /** @var array */
   protected $readOnlyAttributes = [
     'id',
     'entries_tax',
@@ -48,7 +47,6 @@ class CartItem extends ReactiveObject
     'updated'
   ];
 
-  /** @var array */
   protected $defaults = [
     'entry_id' => null,
     'entry_name' => null,
@@ -56,6 +54,56 @@ class CartItem extends ReactiveObject
     'tax_percent' => null,
     'no_of_entries' => null
   ];
+
+  protected $timestamps = [
+    'added',
+    'updated'
+  ];
+
+  public function getEntryIdAttribute($value)
+  {
+    return (int) $value;
+  }
+
+  public function getNoOfEntriesAttribute($value)
+  {
+    return (int) $value;
+  }
+
+  public function getVariantIdAttribute($value)
+  {
+    return (int) $value;
+  }
+
+  public function getVariantCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getTaxPercentAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getTaxCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getEntriesCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getEntriesTotalAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getChangedInCartAttribute($value)
+  {
+    return (int) $value;
+  }
 
   /**
    * @param array|null $discounts
@@ -81,6 +129,9 @@ class CartItem extends ReactiveObject
       });
   }
 
+  /**
+   * @return array
+   */
   public function jsonSerialize()
   {
     $json = parent::jsonSerialize();
