@@ -137,6 +137,19 @@ trait OrderAPI
   }
 
   /**
+   * Set order->status to "n" and checkout->checkout_end to now
+   * @return static
+   * @throws Exception
+   */
+  public function lock()
+  {
+    API::getClient()
+      ->put(static::basePath().$this->id.'/lock');
+
+    return $this;
+  }
+
+  /**
    * Creates empty order object based on orderData
    *
    * @param array $order
