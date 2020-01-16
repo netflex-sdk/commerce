@@ -64,8 +64,13 @@ trait OrderAPI
    */
   public function refresh()
   {
-    $this->attributes = API::getClient()
-      ->get(static::basePath().$this->id, true);
+    if ($this->id) {
+      $this->attributes = API::getClient()
+        ->get(static::basePath().$this->id, true);
+
+    } else {
+      $this->save();
+    }
 
     return $this;
   }
