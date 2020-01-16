@@ -150,6 +150,30 @@ trait OrderAPI
   }
 
   /**
+   * @return static
+   * @throws Exception
+   */
+  public function emptyCart()
+  {
+    API::getClient()
+      ->delete(static::basePath().$this->id.'/cart');
+
+    return $this;
+  }
+
+  /**
+   * @return static
+   * @throws Exception
+   */
+  public function delete()
+  {
+    API::getClient()
+      ->delete(static::basePath().$this->id);
+
+    return $this;
+  }
+
+  /**
    * Creates empty order object based on orderData
    *
    * @param array $order
