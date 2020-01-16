@@ -2,6 +2,7 @@
 
 namespace Netflex\Commerce;
 
+use Carbon\Carbon;
 use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\CartItemAPI;
 
@@ -17,22 +18,26 @@ use Netflex\Commerce\Traits\API\CartItemAPI;
  * @property float $variant_cost
  * @property int $variant_weight
  * @property float $tax_percent
- * @property string $added
- * @property-read string $updated
+ * @property-read float $tax_cost
  * @property-read float $entries_cost
- * @property-read float $entries_tax
  * @property-read float $entries_total
- * @property-read DiscountItem[] $discounts
- * @property Properties $properties
+ * @property int $entries_weight
+ * @property-read Carbon $added
+ * @property-read Carbon $updated
  * @property string $ip
  * @property string $user_agent
  * @property int $changed_in_cart
- * @property string $reservation_start
- * @property string $reservation_end
+ * @property Carbon $reservation_start
+ * @property Carbon $reservation_end
  * @property string $entries_comments
- * @property float $original_entries_cost
- * @property float $original_entries_tax
- * @property float $original_entries_total
+ * @property Properties $properties
+ * @property-read float $entries_discount
+ * @property-read DiscountData $discount_data
+ * @property-read float $original_variant_cost
+ * @property-read float $original_entries_total
+ * @property-read float $original_entries_cost
+ * @property-read float $original_tax_cost
+ * @property-read id $order_id
  */
 class CartItem extends ReactiveObject
 {
@@ -40,11 +45,18 @@ class CartItem extends ReactiveObject
 
   protected $readOnlyAttributes = [
     'id',
-    'entries_tax',
+    'tax_cost',
     'entries_cost',
     'entries_total',
-    'discounts',
-    'updated'
+    'added',
+    'updated',
+    'entries_discount',
+    'discount_data',
+    'original_variant_cost',
+    'original_entries_total',
+    'original_entries_cost',
+    'original_tax_cost',
+    'order_id',
   ];
 
   protected $defaults = [
@@ -105,20 +117,38 @@ class CartItem extends ReactiveObject
     return (int) $value;
   }
 
-  /**
-   * @param array|null $discounts
-   * @return DiscountItemCollection
-   */
-  public function getDiscountsAttribute($discounts)
+  public function getReservationStartAttribute($value)
   {
-    return DiscountItemCollection::factory($discounts, $this)
-      ->addHook('modified', function ($items) {
-        $this->__set('discounts', $items->jsonSerialize());
-      });
+    return !empty($value) ? new Carbon($value) : $value;
+  }
+
+  public function getReservationEndAttribute($value)
+  {
+    return !empty($value) ? new Carbon($value) : $value;
+  }
+
+  public function getOriginalVariantCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getOriginalEntriesTotalAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getOriginalEntriesCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getOriginalTaxCostAttribute($value)
+  {
+    return (float) $value;
   }
 
   /**
-   * @param array|object|null $properties
+   * @param mixed $properties
    * @return Properties
    */
   public function getPropertiesAttribute($properties)
@@ -127,6 +157,15 @@ class CartItem extends ReactiveObject
       ->addHook('modified', function ($properties) {
         $this->__set('properties', $properties->jsonSerialize());
       });
+  }
+
+  /**
+   * @param mixed $data
+   * @return DiscountData
+   */
+  public function getDiscountDataAttribute($data)
+  {
+    return DiscountData::factory($data, $this);
   }
 
   /**
