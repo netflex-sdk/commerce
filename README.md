@@ -36,7 +36,41 @@ API::setCredentials(
 
 If you are using this library with the core Netflex SDK, this should already be set.
 
-## Getting started
+## Getting started TL;DR
+```php
+$order = Order::create()
+  ->addCart([
+    'entry_id' => 10001,
+    'entry_name' => 'Ticket',
+    'variant_cost' => 100,
+    'no_of_entries' => 1,
+    'tax_percent' => 1.12
+  ])
+  ->checkout([
+    'firstname' => 'Ola',
+    'surname' => 'Nordmann'
+  ])
+  ->save([
+    'status' => 'p',
+    'currency' => 'NOK',
+    'customer_mail' => 'ola@nordmann.no',
+    'customer_phone' => '99123456'
+  ])
+  ->addLog('Customer sent to payment')
+  ->addData('payment_id', '123456789', 'Payment ID')
+  ->addPayment([
+    'payment_method' => 'stripe',
+    'amount' => 100,
+    'status' => 'OK',
+    'capture_status' => 'OK',
+    'transaction_id' => '123456789',
+    'card_type_name' => 'visa',
+  ])
+  ->register()
+  ->lock();
+```
+
+## Getting started properly
 Always start with an Order object. Order is the main class of this library, meant to hold all other objects as children.
 
 ```php
