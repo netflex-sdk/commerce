@@ -10,19 +10,11 @@ use Netflex\Support\ReactiveObject;
  */
 class Register extends ReactiveObject
 {
-  /**
-   * @param string|int $id
-   * @return int
-   */
   public function getReceiptOrderIdAttribute($id)
   {
     return (int) $id;
   }
 
-  /**
-   * @param string|int $id
-   * @return int
-   */
   public function getReceiptShippingIdAttribute($id)
   {
     return (int) $id;

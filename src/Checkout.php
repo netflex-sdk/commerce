@@ -33,7 +33,6 @@ use Netflex\Support\ReactiveObject;
  */
 class Checkout extends ReactiveObject
 {
-  /** @var array */
   protected $defaults = [
     'checkout_start' => null,
     'checkout_end' => null,
