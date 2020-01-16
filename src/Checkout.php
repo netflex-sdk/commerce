@@ -2,9 +2,14 @@
 
 namespace Netflex\Commerce;
 
+use Carbon\Carbon;
 use Netflex\Support\ReactiveObject;
 
 /**
+ * @property-read int $id
+ * @property-read int $order_id
+ * @property Carbon $checkout_start
+ * @property Carbon $checkout_end
  * @property string $firstname
  * @property string $surname
  * @property string $company
@@ -23,41 +28,56 @@ use Netflex\Support\ReactiveObject;
  * @property float $expedition_cost
  * @property float $expedition_tax
  * @property float $expedition_total
- * @property string $checkout_start
- * @property string $checkout_end
  * @property string $shipping_tracking_code
  * @property string $shipping_tracking_url
  * @property string $ip
  * @property string $user_agent
- * @property string $updated
+ * @property Carbon $updated
  */
 class Checkout extends ReactiveObject
 {
-  protected $defaults = [
-    'checkout_start' => null,
-    'checkout_end' => null,
-    'firstname' => null,
-    'surname' => null,
-    'company' => null,
-    'address' => null,
-    'postal' => null,
-    'city' => null,
-    'shipping_firstname' => null,
-    'shipping_surname' => null,
-    'shipping_company' => null,
-    'shipping_address' => null,
-    'shipping_postal' => null,
-    'shipping_city' => null,
-    'shipping_cost' => 0.0,
-    'shipping_tax' => 0.0,
-    'shipping_total' => 0.0,
-    'expedition_cost' => 0.0,
-    'expedition_tax' => 0.0,
-    'expedition_total' => 0.0,
-    'user_agent' => null,
-    'shipping_tracking_code' => null,
-    'shipping_tracking_url' => null,
-    'ip' => null,
-    'updated' => null,
-  ];
+  public function getOrderIdAttribute($value)
+  {
+    return (int) $value;
+  }
+
+  public function getShippingCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getShippingTaxAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getShippingTotalAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getExpeditionCostAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getExpeditionTaxAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getExpeditionTotalAttribute($value)
+  {
+    return (float) $value;
+  }
+
+  public function getCheckoutStartAttribute($value)
+  {
+    return !empty($value) ? new Carbon($value) : null;
+  }
+
+  public function getCheckoutEndAttribute($value)
+  {
+    return (!empty($value) && $value !== '0000-00-00 00:00:00') ? new Carbon($value) : null;
+  }
 }
