@@ -3,6 +3,7 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\ReactiveObject;
+use Netflex\Commerce\Traits\API\DiscountItemAPI;
 
 /**
  * @property int $discount_id
@@ -15,12 +16,12 @@ use Netflex\Support\ReactiveObject;
 
 class DiscountItem extends ReactiveObject
 {
-  /** @var array */
+  use DiscountItemAPI;
+
   protected $readOnlyAttributes = [
     'discount_id'
   ];
 
-  /** @var array */
   protected $requiredCreateAttributes = [
     'scope',
     'scope_key',

@@ -29,6 +29,23 @@ trait OrderAddAPI
    * @return static
    * @throws Exception
    */
+  public function addDiscount($item)
+  {
+    if (!$this->id) {
+      $this->save();
+    }
+
+    API::getClient()
+      ->post(static::basePath().$this->id.'/discount', $item);
+
+    return $this;
+  }
+
+  /**
+   * @param array $item
+   * @return static
+   * @throws Exception
+   */
   public function addPayment($item)
   {
     if (!$this->id) {
