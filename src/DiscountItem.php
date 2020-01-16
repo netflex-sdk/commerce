@@ -6,6 +6,8 @@ use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\DiscountItemAPI;
 
 /**
+ * @property int $id
+ * @property int $order_id
  * @property int $discount_id
  * @property string $scope
  * @property string $scope_key
@@ -13,20 +15,27 @@ use Netflex\Commerce\Traits\API\DiscountItemAPI;
  * @property string $type
  * @property float $discount
  */
-
 class DiscountItem extends ReactiveObject
 {
   use DiscountItemAPI;
 
   protected $readOnlyAttributes = [
-    'discount_id'
+    'id',
+    'order_id'
   ];
 
-  protected $requiredCreateAttributes = [
-    'scope',
-    'scope_key',
-    'label',
-    'type',
-    'discount'
-  ];
+  public function getOrderIdAttribute($value)
+  {
+    return (int) $value;
+  }
+
+  public function getDiscountIdAttribute($value)
+  {
+    return (int) $value;
+  }
+
+  public function getDiscountAttribute($value)
+  {
+    return (float) $value;
+  }
 }
