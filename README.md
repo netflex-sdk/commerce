@@ -1,20 +1,20 @@
-<p align="center">
+<p>
 <a href="https://packagist.org/packages/netflex/commerce/stats"><img src="https://img.shields.io/packagist/dm/netflex/commerce" alt="Downloads"></a>
 <a href="https://packagist.org/packages/netflex/commerce"><img src="https://img.shields.io/packagist/v/netflex/commerce?label=stable" alt="Stable version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/netflex-sdk/sdk.svg" alt="License: MIT"></a>
 </p>
 
-# Netflex Commerce SDK
-The Netflex Commerce SDK is a library for working with the commerce endpoints in the Netflex API.
+# Netflex Commerce library
+The Netflex Commerce library is for working with the commerce endpoints in the Netflex API.
 
 ## Contributing
-Thank you for considering contributing to the Netflex Commerce SDK! Please read the [contribution guide](CONTRIBUTING.md).
+Thank you for considering contributing to the Netflex Commerce library! Please read the [contribution guide](CONTRIBUTING.md).
 
 ## Code of Conduct
 In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
-The Netflex Commerce SDK is open-sourced software licensed under the [MIT license](LICENSE).
+The Netflex Commerce library is open-sourced software licensed under the [MIT license](LICENSE).
 
 ## Installation
 
@@ -34,7 +34,7 @@ API::setCredentials(
 );
 ```
 
-If you are using this library with the core Netflex SDK, this should already be set.
+If you are using this library with the Netflex Platform SDK, this should already be set.
 
 ## Getting started TL;DR
 ```php
