@@ -78,7 +78,7 @@ $order = Order::retrieveBySecret('a72b...12f4')
 ```
 
 ## Getting started properly
-Always start with an Order object. Order is the main class of this library, meant to hold all other objects as children.
+Always start with an Order object. Order is the main class of this library, meant to hold all other objects.
 
 ```php
 // Empty object. Does NOT create an order in the API.
@@ -97,12 +97,14 @@ $order = Order::retrieveByRegisterId(10001);
 $order = Order::retrieveBySecret('a1234567896e8bf63bbd43e851811234');
 
 // Retrieves an existing order from the API based on an order secret stored in $_SESSION.
-// If session or order does not exist, it creates an empty object. It does NOT create a new empty order in the API.
+// If session or order does not exist, it creates an empty object.
+// It does NOT create a new empty order in the API.
 // On the next save() or refresh(), it stores the order secret in session.
 $order = Order::retrieveBySession();
 
 // Retrieves an existing order from the API based on an order secret stored in $_SESSION.
-// If session or order does not exist, it creates a new empty order in the API and stores the order secret in session.
+// If session or order does not exist, it creates a new empty order in the API
+// and stores the order secret in session.
 $order = Order::retrieveBySessionOrCreate();
 
 // Manually adding the order secret to session.
@@ -110,7 +112,7 @@ $order->addToSession();
 ```
 
 ## Adding things to the order
-On all add methods below, the data is immediately sent to the API.
+On all add-methods below, the data is immediately sent to the API.
 To update the order object with added items and calculated totals, you need to call the refresh() method.
 
 ```php
@@ -176,7 +178,7 @@ $order->save([
 Updating a cart item.
 Option A:
 ```php
-// Incrementing the number of entries in an item, with a specific entry_id
+// Updating the number of entries on cart items with a specific entry_id
 foreach ($order->cart->items as $item) {
   if ($item->entry_id == 10001) {
     $item->no_of_entries = 5;
