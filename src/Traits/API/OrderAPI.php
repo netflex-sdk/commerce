@@ -189,7 +189,7 @@ trait OrderAPI
   {
     return static::retrieve(
       API::getClient()
-        ->post(static::basePath(), $order)
+        ->post(trim(static::$base_path, '/'), $order)
         ->order_id
     );
   }
