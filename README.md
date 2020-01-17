@@ -121,7 +121,10 @@ $order->addCart([
   'entry_name' => 'Ticket',
   'variant_cost' => 100,
   'no_of_entries' => 1,
-  'tax_percent' => 1.12
+  'tax_percent' => 1.12,
+  'properties' => [
+    'someCustomKey' => 'someCustomValue'
+  ]
 ]);
 
 $order->addLog('This is a log item');
@@ -148,6 +151,9 @@ $order->addPayment([
   'capture_status' => 'OK',
   'transaction_id' => '123456789',
   'card_type_name' => 'visa',
+  'data' => [
+    'someCustomKey' => 'someCustomValue'
+  ]
 ]);
 
 // Updating the order object with added items and calculated totals

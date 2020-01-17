@@ -33,7 +33,10 @@ $order = Order::create()
     'entry_name' => 'Ticket',
     'variant_cost' => 100,
     'no_of_entries' => 1,
-    'tax_percent' => 1.12
+    'tax_percent' => 1.12,
+    'properties' => [
+      'someCustomKey' => 'someCustomValue'
+    ]
   ])
   ->checkout([
     'firstname' => 'Ola',
@@ -58,6 +61,9 @@ $order
     'capture_status' => 'OK',
     'transaction_id' => '123456789',
     'card_type_name' => 'visa',
+    'data' => [
+      'someCustomKey' => 'someCustomValue'
+    ]
   ])
   ->register()
   ->lock()
