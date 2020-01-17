@@ -48,8 +48,6 @@ trait OrderAPI
       if (!empty($payload)) {
         API::getClient()
           ->put(static::basePath().$this->id, $payload);
-
-        $this->refresh();
       }
     }
 
