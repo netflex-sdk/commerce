@@ -160,6 +160,19 @@ $order->addPayment([
 $order->refresh();
 ```
 
+It is also possible to pass in and Item object in most of the add methods.
+```php
+$cartItem = new CartItem();
+
+$cartItem->entry_id = 10001;
+$cartItem->entry_name = 'Ticket';
+$cartItem->variant_cost = 100;
+$cartItem->no_of_entries = 1;
+$cartItem->tax_percent = 1.12;
+
+$order->addCart($cartItem);
+```
+
 ## Updating the order
 Updating the properties on the main order object.
 Option A:
