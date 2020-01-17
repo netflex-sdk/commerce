@@ -38,6 +38,7 @@ If you are using this library with the core Netflex SDK, this should already be 
 
 ## Getting started TL;DR
 ```php
+// Creating new order and checking out
 $order = Order::create()
   ->addCart([
     'entry_id' => 10001,
@@ -56,8 +57,12 @@ $order = Order::create()
     'customer_mail' => 'ola@nordmann.no',
     'customer_phone' => '99123456'
   ])
-  ->addLog('Customer sent to payment')
-  ->addData('payment_id', '123456789', 'Payment ID')
+  ->addData('paymentId', '123456789', 'Payment ID')
+  ->addLog('Customer sent to payment');
+
+// Adding payment and completing order
+$order = Order::retrieveBySecret('a72b...12f4')
+  ->addLog('Customer returned from payment')
   ->addPayment([
     'payment_method' => 'stripe',
     'amount' => 100,
