@@ -2,6 +2,9 @@
 
 namespace Netflex\Commerce;
 
+use Netflex\Query\Traits\HasRelation;
+use Netflex\Query\Traits\ModelMapper;
+use Netflex\Query\Traits\Queryable;
 use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\OrderAPI;
 
@@ -35,10 +38,17 @@ use Netflex\Commerce\Traits\API\OrderAPI;
 class Order extends ReactiveObject
 {
   use OrderAPI;
+  use Queryable;
+  use HasRelation;
+  use ModelMapper;
 
   public static $sessionKey = 'netflex_cart';
 
   protected static $base_path = 'commerce/orders';
+
+  protected $triedReceivedBySession = false;
+
+  protected $relation = 'order';
 
   protected $defaults = [
     'id' => null,
@@ -70,7 +80,13 @@ class Order extends ReactiveObject
     'discounts' => null,
   ];
 
-  protected $triedReceivedBySession = false;
+  /**
+   * @param array $attributes
+   * @return static
+   */
+  public function newFromBuilder($attributes = []) {
+    return new static($attributes);
+  }
 
   /**
    * @param string|int $id
