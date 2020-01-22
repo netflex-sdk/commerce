@@ -3,7 +3,7 @@
 namespace Netflex\Commerce\Traits\API;
 
 use Exception;
-use Netflex\API;
+use Netflex\API\Facades\API;
 use Netflex\Commerce\Exceptions\OrderNotFoundException;
 
 trait OrderAPI
@@ -33,9 +33,7 @@ trait OrderAPI
 
     // Post new
     if (!$this->id) {
-      $this->attributes['id'] = API::getClient()
-        ->post(trim(static::$base_path, '/'), $payload)
-        ->order_id;
+      $this->attributes['id'] = API::post(trim(static::$base_path, '/'), $payload)->order_id;
 
       $this->refresh();
 
@@ -46,8 +44,7 @@ trait OrderAPI
     } else {
       // Put updates
       if (!empty($payload)) {
-        API::getClient()
-          ->put(static::basePath().$this->id, $payload);
+        API::put(static::basePath().$this->id, $payload);
 
         $this->forgetInCache();
       }
@@ -65,8 +62,7 @@ trait OrderAPI
   public function refresh()
   {
     if ($this->id) {
-      $this->attributes = API::getClient()
-        ->get(static::basePath().$this->id, true);
+      $this->attributes = API::get(static::basePath().$this->id, true);
 
       $this->addToCache();
 
@@ -125,8 +121,7 @@ trait OrderAPI
    */
   public function checkout($payload = [])
   {
-    API::getClient()
-      ->put(static::basePath().$this->id.'/checkout', $payload);
+    API::put(static::basePath().$this->id.'/checkout', $payload);
 
     return $this->forgetInCache();
   }
@@ -137,8 +132,7 @@ trait OrderAPI
    */
   public function register()
   {
-    API::getClient()
-      ->put(static::basePath().$this->id.'/register');
+    API::put(static::basePath().$this->id.'/register');
 
     return $this->forgetInCache();
   }
@@ -150,8 +144,7 @@ trait OrderAPI
    */
   public function lock()
   {
-    API::getClient()
-      ->put(static::basePath().$this->id.'/lock');
+    API::put(static::basePath().$this->id.'/lock');
 
     return $this->forgetInCache();
   }
@@ -162,8 +155,7 @@ trait OrderAPI
    */
   public function emptyCart()
   {
-    API::getClient()
-      ->delete(static::basePath().$this->id.'/cart');
+    API::delete(static::basePath().$this->id.'/cart');
 
     return $this->forgetInCache();
   }
@@ -174,8 +166,7 @@ trait OrderAPI
    */
   public function delete()
   {
-    API::getClient()
-      ->delete(static::basePath().$this->id);
+    API::delete(static::basePath().$this->id);
 
     return $this->removeFromSession()->forgetInCache();
   }
@@ -190,9 +181,7 @@ trait OrderAPI
   public static function create($order = [])
   {
     return static::retrieve(
-      API::getClient()
-        ->post(trim(static::$base_path, '/'), $order)
-        ->order_id
+      API::post(trim(static::$base_path, '/'), $order)->order_id
     );
   }
 
@@ -258,8 +247,7 @@ trait OrderAPI
   public static function retrieveBySecret($secret)
   {
     if (!$data = static::getFromCache($secret)) {
-      $data = API::getClient()
-        ->get(static::basePath().'secret/'.$secret);
+      $data = API::get(static::basePath().'secret/'.$secret);
     }
 
     $order = new static($data);
@@ -278,8 +266,7 @@ trait OrderAPI
    */
   public static function retrieveByRegisterId($id)
   {
-    $data = API::getClient()
-      ->get(static::basePath().'register/'.$id);
+    $data = API::get(static::basePath().'register/'.$id);
 
     $order = new static($data);
 
@@ -298,8 +285,7 @@ trait OrderAPI
   public static function retrieve($id)
   {
     if (!$data = static::getFromCache($id)) {
-      $data = API::getClient()
-        ->get(static::basePath().$id);
+      $data = API::get(static::basePath().$id);
     }
 
     $order = new static($data);

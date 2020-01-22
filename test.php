@@ -4,7 +4,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 date_default_timezone_set('Europe/Oslo');
 
-use Netflex\API;
+use Netflex\API\Providers\APIServiceProvider;
 use Dotenv\Dotenv;
 
 use Netflex\Commerce\CartItem;
@@ -23,11 +23,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 Dotenv::create(__DIR__)->load();
 
-API::setCredentials(
-  getenv('NETFLEX_PUBLIC_KEY'),
-  getenv('NETFLEX_PRIVATE_KEY'),
-);
-
 // Cache test setup
 $container = new Container;
 $container['config'] = [
@@ -35,12 +30,16 @@ $container['config'] = [
   'cache.stores.file' => [
     'driver' => 'file',
     'path' => __DIR__ . '/cache'
-  ]
+  ],
+  'api.publicKey' => getenv('NETFLEX_PUBLIC_KEY'),
+  'api.privateKey' => getenv('NETFLEX_PRIVATE_KEY'),
 ];
 $container['files'] = new Filesystem;
 $container->singleton('cache', function ($app) {
   return (new CacheManager($app))->store();
 });
+
+(new APIServiceProvider($container))->register();
 Facade::setFacadeApplication($container);
 
 /**

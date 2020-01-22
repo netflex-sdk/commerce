@@ -3,7 +3,7 @@
 namespace Netflex\Commerce\Traits\API;
 
 use Exception;
-use Netflex\API;
+use Netflex\API\Facades\API;
 use Netflex\Commerce\Order;
 
 trait CartItemAPI
@@ -20,8 +20,7 @@ trait CartItemAPI
     }
 
     if (!empty($updates)) {
-      API::getClient()
-        ->put(Order::basePath().$this->order_id.'/cart/'.$this->id, $updates);
+      API::put(Order::basePath().$this->order_id.'/cart/'.$this->id, $updates);
     }
 
     $this->modified = [];
@@ -34,7 +33,6 @@ trait CartItemAPI
    */
   public function delete()
   {
-    API::getClient()
-      ->delete(Order::basePath().$this->order_id.'/cart/'.$this->id);
+    API::delete(Order::basePath().$this->order_id.'/cart/'.$this->id);
   }
 }

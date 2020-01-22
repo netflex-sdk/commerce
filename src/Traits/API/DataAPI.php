@@ -3,7 +3,7 @@
 namespace Netflex\Commerce\Traits\API;
 
 use Exception;
-use Netflex\API;
+use Netflex\API\Facades\API;
 use Netflex\Commerce\Order;
 
 trait DataAPI
@@ -14,7 +14,6 @@ trait DataAPI
    */
   public function delete($key)
   {
-    API::getClient()
-      ->delete(Order::basePath().$this->parent->id.'/data/'.$key);
+    API::delete(Order::basePath().$this->parent->id.'/data/'.$key);
   }
 }

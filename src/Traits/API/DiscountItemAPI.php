@@ -3,7 +3,7 @@
 namespace Netflex\Commerce\Traits\API;
 
 use Exception;
-use Netflex\API;
+use Netflex\API\Facades\API;
 use Netflex\Commerce\Order;
 
 trait DiscountItemAPI
@@ -13,7 +13,6 @@ trait DiscountItemAPI
    */
   public function delete()
   {
-    API::getClient()
-      ->delete(Order::basePath().$this->order_id.'/discount/'.$this->id);
+    API::delete(Order::basePath().$this->order_id.'/discount/'.$this->id);
   }
 }

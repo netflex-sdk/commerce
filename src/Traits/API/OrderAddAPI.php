@@ -3,7 +3,7 @@
 namespace Netflex\Commerce\Traits\API;
 
 use Exception;
-use Netflex\API;
+use Netflex\API\Facades\API;
 
 trait OrderAddAPI
 {
@@ -18,8 +18,7 @@ trait OrderAddAPI
       $this->save();
     }
 
-    API::getClient()
-      ->post(static::basePath().$this->id.'/cart', $item);
+    API::post(static::basePath().$this->id.'/cart', $item);
 
     return $this->forgetInCache();
   }
@@ -35,8 +34,7 @@ trait OrderAddAPI
       $this->save();
     }
 
-    API::getClient()
-      ->post(static::basePath().$this->id.'/discount', $item);
+    API::post(static::basePath().$this->id.'/discount', $item);
 
     return $this->forgetInCache();
   }
@@ -52,8 +50,7 @@ trait OrderAddAPI
       $this->save();
     }
 
-    API::getClient()
-      ->post(static::basePath().$this->id.'/payment', $item);
+    API::post(static::basePath().$this->id.'/payment', $item);
 
     return $this->forgetInCache();
   }
@@ -80,8 +77,7 @@ trait OrderAddAPI
       $item['label'] = $label;
     }
 
-    API::getClient()
-      ->put(static::basePath().$this->id.'/data', $item);
+    API::put(static::basePath().$this->id.'/data', $item);
 
     return $this->forgetInCache();
   }
@@ -144,8 +140,7 @@ trait OrderAddAPI
 
     $item['type'] = $item['type'] ?? $type;
 
-    API::getClient()
-      ->post(static::basePath().$this->id.'/log', $item);
+    API::post(static::basePath().$this->id.'/log', $item);
 
     return $this->forgetInCache();
   }
