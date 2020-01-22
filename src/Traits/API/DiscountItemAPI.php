@@ -14,5 +14,7 @@ trait DiscountItemAPI
   public function delete()
   {
     API::delete(Order::basePath().$this->order_id.'/discount/'.$this->id);
+
+    $this->getRootParent()->forgetInCache();
   }
 }

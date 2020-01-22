@@ -15,5 +15,7 @@ trait DataAPI
   public function delete($key)
   {
     API::delete(Order::basePath().$this->parent->id.'/data/'.$key);
+
+    $this->getRootParent()->forgetInCache();
   }
 }

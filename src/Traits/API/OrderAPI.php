@@ -341,7 +341,7 @@ trait OrderAPI
   /**
    * @return static
    */
-  protected function forgetInCache()
+  public function forgetInCache()
   {
     if ($this->id
       && static::$useCache
