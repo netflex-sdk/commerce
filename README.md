@@ -7,34 +7,11 @@
 # Netflex Commerce library
 The Netflex Commerce library is for working with the commerce endpoints in the Netflex API.
 
-## Contributing
-Thank you for considering contributing to the Netflex Commerce library! Please read the [contribution guide](CONTRIBUTING.md).
-
-## Code of Conduct
-In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## License
-The Netflex Commerce library is open-sourced software licensed under the [MIT license](LICENSE).
-
 ## Installation
 
 ```bash
 composer require netflex/commerce
 ```
-
-## Standalone setup
-If you are using this library standalone, you need to specify API keys in the .env file and set them in the API client.
-
-```php
-Dotenv::create(__DIR__)->load();
-
-API::setCredentials(
-  getenv('NETFLEX_PUBLIC_KEY'),
-  getenv('NETFLEX_PRIVATE_KEY'),
-);
-```
-
-If you are using this library with the Netflex Platform SDK, this should already be set.
 
 ## Getting started TL;DR
 ```php
@@ -232,8 +209,23 @@ $order->checkoutEnd();
 $order->lock();
 
 $order->removeFromSession();
-
 ```
+
+## Search query builder
+This package use the <a href="https://github.com/netflex-sdk/query-builder">Netflex QueryBuilder library</a>, so you can easily search for and return a collection of orders.
+```php
+$orders = Order::where('data.someCustomKey', 'someCustomValue')->get();
+```
+
+## Contributing
+Thank you for considering contributing to the Netflex Commerce library! Please read the [contribution guide](CONTRIBUTING.md).
+
+## Code of Conduct
+In order to ensure that the community is welcoming to all, please review and abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
+The Netflex Commerce library is open-sourced software licensed under the [MIT license](LICENSE).
+
 <hr>
 
 Copyright &copy; 2009-2020 **[Apility AS](https://apility.no)**
