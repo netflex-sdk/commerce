@@ -21,7 +21,7 @@ trait OrderAddAPI
     API::getClient()
       ->post(static::basePath().$this->id.'/cart', $item);
 
-    return $this;
+    return $this->forgetInCache();
   }
 
   /**
@@ -38,7 +38,7 @@ trait OrderAddAPI
     API::getClient()
       ->post(static::basePath().$this->id.'/discount', $item);
 
-    return $this;
+    return $this->forgetInCache();
   }
 
   /**
@@ -55,7 +55,7 @@ trait OrderAddAPI
     API::getClient()
       ->post(static::basePath().$this->id.'/payment', $item);
 
-    return $this;
+    return $this->forgetInCache();
   }
 
   /**
@@ -83,7 +83,7 @@ trait OrderAddAPI
     API::getClient()
       ->put(static::basePath().$this->id.'/data', $item);
 
-    return $this;
+    return $this->forgetInCache();
   }
 
   /**
@@ -147,6 +147,6 @@ trait OrderAddAPI
     API::getClient()
       ->post(static::basePath().$this->id.'/log', $item);
 
-    return $this;
+    return $this->forgetInCache();
   }
 }

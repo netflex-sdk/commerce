@@ -11,6 +11,12 @@ use Netflex\Commerce\CartItem;
 use Netflex\Commerce\LogItem;
 use Netflex\Commerce\Order;
 
+use Illuminate\Container\Container;
+use Illuminate\Cache\CacheManager;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Cache;
+
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
@@ -21,6 +27,21 @@ API::setCredentials(
   getenv('NETFLEX_PUBLIC_KEY'),
   getenv('NETFLEX_PRIVATE_KEY'),
 );
+
+// Cache test setup
+$container = new Container;
+$container['config'] = [
+  'cache.default' => 'file',
+  'cache.stores.file' => [
+    'driver' => 'file',
+    'path' => __DIR__ . '/cache'
+  ]
+];
+$container['files'] = new Filesystem;
+$container->singleton('cache', function ($app) {
+  return (new CacheManager($app))->store();
+});
+Facade::setFacadeApplication($container);
 
 /**
  * -------------------------------------------------------

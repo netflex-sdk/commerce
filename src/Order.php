@@ -42,6 +42,10 @@ class Order extends ReactiveObject
   use HasRelation;
   use ModelMapper;
 
+  public static $useCache = true;
+  public static $cacheBaseKey = 'order';
+  public static $cacheTTL = 3600; // seconds
+
   public static $sessionKey = 'netflex_cart';
 
   protected static $base_path = 'commerce/orders';

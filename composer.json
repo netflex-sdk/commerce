@@ -6,6 +6,10 @@
     {
       "name": "Thomas Alrek",
       "email": "thomas@apility.no"
+    },
+    {
+      "name": "Tormund Gerhardsen",
+      "email": "tormund@apility.no"
     }
   ],
   "autoload": {
@@ -20,6 +24,9 @@
   },
   "require-dev": {
     "vlucas/phpdotenv": "^3.6",
-    "larapack/dd": "^1.1"
+    "larapack/dd": "^1.1",
+    "illuminate/container": "^6.12",
+    "illuminate/cache": "^6.12",
+    "illuminate/filesystem": "^6.12"
   }
 }

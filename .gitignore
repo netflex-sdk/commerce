@@ -4,3 +4,4 @@ vendor
 # Other
 .env
 .idea
+cache
