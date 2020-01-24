@@ -1,11 +1,12 @@
+# Netflex Commerce library
+
+The Netflex Commerce library is for working with the commerce endpoints in the Netflex API.
+
 <p>
 <a href="https://packagist.org/packages/netflex/commerce/stats"><img src="https://img.shields.io/packagist/dm/netflex/commerce" alt="Downloads"></a>
 <a href="https://packagist.org/packages/netflex/commerce"><img src="https://img.shields.io/packagist/v/netflex/commerce?label=stable" alt="Stable version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/netflex-sdk/sdk.svg" alt="License: MIT"></a>
 </p>
-
-# Netflex Commerce library
-The Netflex Commerce library is for working with the commerce endpoints in the Netflex API.
 
 ## Installation
 
@@ -228,4 +229,4 @@ The Netflex Commerce library is open-sourced software licensed under the [MIT li
 
 <hr>
 
-Copyright &copy; 2009-2020 **[Apility AS](https://apility.no)**
+Copyright &copy; 2020 **[Apility AS](https://apility.no)**
