@@ -7,7 +7,6 @@ use Netflex\Support\ReactiveObject;
 
 class Properties extends ReactiveObject
 {
-  /** @var array */
   protected $readOnlyAttributes = [];
 
   /**

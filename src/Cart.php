@@ -3,7 +3,6 @@
 namespace Netflex\Commerce;
 
 use Netflex\Support\ReactiveObject;
-use Netflex\Commerce\Traits\API\Cart as CartAPI;
 
 /**
  * @property-read int $id
@@ -19,13 +18,18 @@ use Netflex\Commerce\Traits\API\Cart as CartAPI;
  */
 class Cart extends ReactiveObject
 {
-  use CartAPI;
-
   protected $defaults = [
-    'items' => []
+    'sub_total' => 0,
+    'discount' => 0,
+    'tax' => 0,
+    'total' => 0,
+    'weight' => 0,
+    'count_items' => 0,
+    'count_lines' => 0,
+    'items' => [],
+    'reservations' => [],
   ];
 
-  /** @var array */
   protected $readOnlyAttributes = [
     'sub_total',
     'discount',
@@ -43,6 +47,17 @@ class Cart extends ReactiveObject
    */
   public function getItemsAttribute($items = [])
   {
+    if (!empty($items)) {
+      $items = array_map(function ($item) {
+        if (is_array($item)) {
+          $item['order_id'] = $this->parent->id;
+        } else {
+          $item->order_id = $this->parent->id;
+        }
+        return $item;
+      }, $items);
+    }
+
     return CartItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
         $this->__set('items', $items->jsonSerialize());
@@ -55,7 +70,7 @@ class Cart extends ReactiveObject
    */
   public function getReservationsAttribute($items = [])
   {
-    return ReservationItemCollection::factory($items)
+    return ReservationItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
         $this->__set('reservations', $items->jsonSerialize());
       });

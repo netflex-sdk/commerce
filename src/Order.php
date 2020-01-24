@@ -2,9 +2,11 @@
 
 namespace Netflex\Commerce;
 
-use Netflex\Support\Retrievable;
+use Netflex\Query\Traits\HasRelation;
+use Netflex\Query\Traits\ModelMapper;
+use Netflex\Query\Traits\Queryable;
 use Netflex\Support\ReactiveObject;
-use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
+use Netflex\Commerce\Traits\API\OrderAPI;
 
 /**
  * @property-read int $id
@@ -31,18 +33,64 @@ use Netflex\Commerce\Traits\API\Orders as OrdersAPI;
  * @property-read Data[] $data
  * @property-read LogItemCollection $log
  * @property-read Checkout[] $checkout
+ * @property-read DiscountItemCollection $discounts
  */
 class Order extends ReactiveObject
 {
-  use OrdersAPI;
-  use Retrievable;
+  use OrderAPI;
+  use Queryable;
+  use HasRelation;
+  use ModelMapper;
 
-  /** @var string */
+  public static $useCache = true;
+  public static $cacheBaseKey = 'order';
+  public static $cacheTTL = 3600; // seconds
+
+  public static $sessionKey = 'netflex_cart';
+
   protected static $base_path = 'commerce/orders';
 
+  protected $triedReceivedBySession = false;
+
+  protected $relation = 'order';
+
   protected $defaults = [
-    'cart' => null
+    'id' => null,
+    'created' => null,
+    'updated' => null,
+    'status' => null,
+    'type' => null,
+    'secret' => null,
+    'ip' => null,
+    'user_agent' => null,
+    'customer_id' => null,
+    'customer_code' => null,
+    'customer_mail' => null,
+    'customer_phone' => null,
+    'payment_method' => null,
+    'currency' => null,
+    'order_cost' => 0,
+    'order_total' => 0,
+    'order_tax' => 0,
+    'abandoned' => false,
+    'abandoned_reminder_sent' => false,
+    'abandoned_reminder_mail' => null,
+    'register' => null,
+    'data' => null,
+    'cart' => null,
+    'log' => null,
+    'checkout' => null,
+    'payments' => null,
+    'discounts' => null,
   ];
+
+  /**
+   * @param array $attributes
+   * @return static
+   */
+  public function newFromBuilder($attributes = []) {
+    return new static($attributes);
+  }
 
   /**
    * @param string|int $id
@@ -104,24 +152,18 @@ class Order extends ReactiveObject
    */
   public function getRegisterAttribute($register)
   {
-    return Register::factory($register);
+    return Register::factory($register, $this);
   }
 
   /**
-   * @param object|array|null $value
+   * @param object|array|null $cart
    * @return Cart
    */
   public function getCartAttribute($cart = [])
   {
     return Cart::factory($cart, $this)
       ->addHook('modified', function (Cart $cart) {
-        if (!$this->id) {
-          $this->save();
-        }
-
-        foreach ($cart->items as $item) {
-          $cart->addCartItem($item, $this->id);
-        }
+        $this->__set('cart', $cart->jsonSerialize());
       });
   }
 
@@ -131,7 +173,7 @@ class Order extends ReactiveObject
    */
   public function getDataAttribute($data = [])
   {
-    return Data::factory($data)
+    return Data::factory($data, $this)
       ->addHook('modified', function (Data $data) {
         $this->__set('data', $data->jsonSerialize());
       });
@@ -143,7 +185,7 @@ class Order extends ReactiveObject
    */
   public function getPaymentsAttribute($payments = null)
   {
-    return Payments::factory($payments)
+    return Payments::factory($payments, $this)
       ->addHook('modified', function (Payments $payments) {
         $this->__set('payments', $payments->jsonSerialize());
       });
@@ -165,7 +207,7 @@ class Order extends ReactiveObject
    * @param array|null $discounts
    * @return DiscountItemCollection
    */
-  public function getDiscountsAttribute(array $discounts = [])
+  public function getDiscountsAttribute($discounts = [])
   {
     return DiscountItemCollection::factory($discounts, $this)
       ->addHook('modified', function (DiscountItemCollection $discounts) {
@@ -177,11 +219,28 @@ class Order extends ReactiveObject
    * @param array|null $log
    * @return LogItemCollection
    */
-  public function getLogAttribute(array $log = [])
+  public function getLogAttribute($log = [])
   {
-    return LogItemCollection::factory($log)
+    return LogItemCollection::factory($log, $this)
       ->addHook('modified', function (LogItemCollection $log) {
         $this->__set('log', $log->jsonSerialize());
       });
+  }
+
+  /**
+   * Return the current date and time, formatted as it is stored in the database
+   * @return string
+   */
+  public static function dateTimeNow()
+  {
+    return date('Y-m-d H:i:s');
+  }
+
+  /**
+   * @return string
+   */
+  public static function basePath()
+  {
+    return trim(static::$base_path, '/').'/';
   }
 }

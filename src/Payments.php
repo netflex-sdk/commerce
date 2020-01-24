@@ -10,14 +10,21 @@ use Netflex\Support\ReactiveObject;
  */
 class Payments extends ReactiveObject
 {
-  /** @var array */
-  protected $readOnlyAttributes = ['total', 'items'];
+  protected $defaults = [
+    'total' => 0,
+    'items' => []
+  ];
+
+  protected $readOnlyAttributes = [
+    'total',
+    'items'
+  ];
 
   /**
    * @param array|null $items
    * @return PaymentItemCollection
    */
-  public function getItemsAttribute(array $items)
+  public function getItemsAttribute($items = [])
   {
     return PaymentItemCollection::factory($items, $this)
       ->addHook('modified', function ($items) {
