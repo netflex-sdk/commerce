@@ -40,11 +40,10 @@ trait OrderAPI
       if ($this->triedReceivedBySession) {
         $this->addToSession();
       }
-
     } else {
       // Put updates
       if (!empty($payload)) {
-        API::put(static::basePath().$this->id, $payload);
+        API::put(static::basePath() . $this->id, $payload);
 
         $this->forgetInCache();
       }
@@ -62,10 +61,9 @@ trait OrderAPI
   public function refresh()
   {
     if ($this->id) {
-      $this->attributes = API::get(static::basePath().$this->id, true);
+      $this->attributes = API::get(static::basePath() . $this->id, true);
 
       $this->addToCache();
-
     } else {
       $this->save();
     }
@@ -121,7 +119,7 @@ trait OrderAPI
    */
   public function checkout($payload = [])
   {
-    API::put(static::basePath().$this->id.'/checkout', $payload);
+    API::put(static::basePath() . $this->id . '/checkout', $payload);
 
     return $this->forgetInCache();
   }
@@ -132,7 +130,7 @@ trait OrderAPI
    */
   public function register()
   {
-    API::put(static::basePath().$this->id.'/register');
+    API::put(static::basePath() . $this->id . '/register');
 
     return $this->forgetInCache();
   }
@@ -144,7 +142,7 @@ trait OrderAPI
    */
   public function lock()
   {
-    API::put(static::basePath().$this->id.'/lock');
+    API::put(static::basePath() . $this->id . '/lock');
 
     return $this->forgetInCache();
   }
@@ -155,7 +153,7 @@ trait OrderAPI
    */
   public function emptyCart()
   {
-    API::delete(static::basePath().$this->id.'/cart');
+    API::delete(static::basePath() . $this->id . '/cart');
 
     return $this->forgetInCache();
   }
@@ -166,7 +164,7 @@ trait OrderAPI
    */
   public function delete()
   {
-    API::delete(static::basePath().$this->id);
+    API::delete(static::basePath() . $this->id);
 
     return $this->removeFromSession()->forgetInCache();
   }
@@ -224,13 +222,11 @@ trait OrderAPI
     if (isset($_SESSION[static::$sessionKey])) {
       try {
         $order = static::retrieveBySecret($_SESSION[static::$sessionKey]);
-
       } catch (OrderNotFoundException $e) {
         $order = new static();
         $order->removeFromSession();
         $order->triedReceivedBySession = true;
       }
-
     } else {
       $order = new static();
       $order->triedReceivedBySession = true;
@@ -247,13 +243,13 @@ trait OrderAPI
   public static function retrieveBySecret($secret)
   {
     if (!$data = static::getFromCache($secret)) {
-      $data = API::get(static::basePath().'secret/'.$secret);
+      $data = API::get(static::basePath() . 'secret/' . $secret);
     }
 
     $order = new static($data);
 
     if (!$order->id) {
-      throw new OrderNotFoundException('Order not found with secret '.$secret);
+      throw new OrderNotFoundException('Order not found with secret ' . $secret);
     }
 
     return $order->addToCache();
@@ -266,12 +262,12 @@ trait OrderAPI
    */
   public static function retrieveByRegisterId($id)
   {
-    $data = API::get(static::basePath().'register/'.$id);
+    $data = API::get(static::basePath() . 'register/' . $id);
 
     $order = new static($data);
 
     if (!$order->id) {
-      throw new OrderNotFoundException('Order not found with register id '.$id);
+      throw new OrderNotFoundException('Order not found with register id ' . $id);
     }
 
     return $order->addToCache();
@@ -285,13 +281,13 @@ trait OrderAPI
   public static function retrieve($id)
   {
     if (!$data = static::getFromCache($id)) {
-      $data = API::get(static::basePath().$id);
+      $data = API::get(static::basePath() . $id);
     }
 
     $order = new static($data);
 
     if (!$order->id) {
-      throw new OrderNotFoundException('Order not found with id '.$id);
+      throw new OrderNotFoundException('Order not found with id ' . $id);
     }
 
     return $order->addToCache();
@@ -303,11 +299,12 @@ trait OrderAPI
    */
   protected static function getFromCache($key)
   {
-    if (static::$useCache
+    if (
+      static::$useCache
       && class_exists('Illuminate\Support\Facades\Cache')
     ) {
       return \Illuminate\Support\Facades\Cache::get(
-        static::$cacheBaseKey.'/'.$key
+        static::$cacheBaseKey . '/' . $key
       );
     }
 
@@ -319,17 +316,18 @@ trait OrderAPI
    */
   protected function addToCache()
   {
-    if ($this->id
+    if (
+      $this->id
       && static::$useCache
       && class_exists('Illuminate\Support\Facades\Cache')
     ) {
       \Illuminate\Support\Facades\Cache::add(
-        static::$cacheBaseKey.'/'.$this->id,
+        static::$cacheBaseKey . '/' . $this->id,
         $this->attributes,
         static::$cacheTTL
       );
       \Illuminate\Support\Facades\Cache::add(
-        static::$cacheBaseKey.'/'.$this->secret,
+        static::$cacheBaseKey . '/' . $this->secret,
         $this->attributes,
         static::$cacheTTL
       );
@@ -343,19 +341,19 @@ trait OrderAPI
    */
   public function forgetInCache()
   {
-    if ($this->id
+    if (
+      $this->id
       && static::$useCache
       && class_exists('Illuminate\Support\Facades\Cache')
     ) {
       \Illuminate\Support\Facades\Cache::forget(
-        static::$cacheBaseKey.'/'.$this->id
+        static::$cacheBaseKey . '/' . $this->id
       );
       \Illuminate\Support\Facades\Cache::forget(
-        static::$cacheBaseKey.'/'.$this->secret
+        static::$cacheBaseKey . '/' . $this->secret
       );
     }
 
     return $this;
   }
-
 }

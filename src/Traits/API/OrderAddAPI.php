@@ -18,7 +18,7 @@ trait OrderAddAPI
       $this->save();
     }
 
-    API::post(static::basePath().$this->id.'/cart', $item);
+    API::post(static::basePath() . $this->id . '/cart', $item);
 
     return $this->forgetInCache();
   }
@@ -34,7 +34,7 @@ trait OrderAddAPI
       $this->save();
     }
 
-    API::post(static::basePath().$this->id.'/discount', $item);
+    API::post(static::basePath() . $this->id . '/discount', $item);
 
     return $this->forgetInCache();
   }
@@ -50,7 +50,7 @@ trait OrderAddAPI
       $this->save();
     }
 
-    API::post(static::basePath().$this->id.'/payment', $item);
+    API::post(static::basePath() . $this->id . '/payment', $item);
 
     return $this->forgetInCache();
   }
@@ -77,7 +77,7 @@ trait OrderAddAPI
       $item['label'] = $label;
     }
 
-    API::put(static::basePath().$this->id.'/data', $item);
+    API::put(static::basePath() . $this->id . '/data', $item);
 
     return $this->forgetInCache();
   }
@@ -140,7 +140,7 @@ trait OrderAddAPI
 
     $item['type'] = $item['type'] ?? $type;
 
-    API::post(static::basePath().$this->id.'/log', $item);
+    API::post(static::basePath() . $this->id . '/log', $item);
 
     return $this->forgetInCache();
   }

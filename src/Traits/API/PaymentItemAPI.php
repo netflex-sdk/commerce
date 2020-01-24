@@ -20,7 +20,7 @@ trait PaymentItemAPI
     }
 
     if (!empty($updates)) {
-      API::put(Order::basePath().$this->order_id.'/payment/'.$this->id, $updates);
+      API::put(Order::basePath() . $this->order_id . '/payment/' . $this->id, $updates);
 
       $this->getRootParent()->forgetInCache();
     }
@@ -35,7 +35,7 @@ trait PaymentItemAPI
    */
   public function delete()
   {
-    API::delete(Order::basePath().$this->order_id.'/payment/'.$this->id);
+    API::delete(Order::basePath() . $this->order_id . '/payment/' . $this->id);
 
     $this->getRootParent()->forgetInCache();
   }

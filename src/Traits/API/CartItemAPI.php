@@ -20,7 +20,7 @@ trait CartItemAPI
     }
 
     if (!empty($updates)) {
-      API::put(Order::basePath().$this->order_id.'/cart/'.$this->id, $updates);
+      API::put(Order::basePath() . $this->order_id . '/cart/' . $this->id, $updates);
 
       $this->getRootParent()->forgetInCache();
     }
@@ -35,7 +35,7 @@ trait CartItemAPI
    */
   public function delete()
   {
-    API::delete(Order::basePath().$this->order_id.'/cart/'.$this->id);
+    API::delete(Order::basePath() . $this->order_id . '/cart/' . $this->id);
 
     $this->getRootParent()->forgetInCache();
   }

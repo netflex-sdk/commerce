@@ -20,7 +20,7 @@ trait LogItemAPI
     }
 
     if (!empty($updates)) {
-      API::put(Order::basePath().$this->order_id.'/log/'.$this->id, $updates);
+      API::put(Order::basePath() . $this->order_id . '/log/' . $this->id, $updates);
 
       $this->getRootParent()->forgetInCache();
     }
@@ -35,7 +35,7 @@ trait LogItemAPI
    */
   public function delete()
   {
-    API::delete(Order::basePath().$this->order_id.'/log/'.$this->id);
+    API::delete(Order::basePath() . $this->order_id . '/log/' . $this->id);
 
     $this->getRootParent()->forgetInCache();
   }

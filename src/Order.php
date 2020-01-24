@@ -88,7 +88,8 @@ class Order extends ReactiveObject
    * @param array $attributes
    * @return static
    */
-  public function newFromBuilder($attributes = []) {
+  public function newFromBuilder($attributes = [])
+  {
     return new static($attributes);
   }
 
@@ -241,6 +242,6 @@ class Order extends ReactiveObject
    */
   public static function basePath()
   {
-    return trim(static::$base_path, '/').'/';
+    return trim(static::$base_path, '/') . '/';
   }
 }
