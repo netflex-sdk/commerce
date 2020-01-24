@@ -593,16 +593,16 @@
         },
         {
             "name": "netflex/query-builder",
-            "version": "v2.0.4",
+            "version": "v2.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/netflex-sdk/query-builder.git",
-                "reference": "229d1d4401f7dc195df3d482c4eb12bcd89a6cfa"
+                "reference": "3c9ed2253fa5d9251d2238debb07055015c59a9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netflex-sdk/query-builder/zipball/229d1d4401f7dc195df3d482c4eb12bcd89a6cfa",
-                "reference": "229d1d4401f7dc195df3d482c4eb12bcd89a6cfa",
+                "url": "https://api.github.com/repos/netflex-sdk/query-builder/zipball/3c9ed2253fa5d9251d2238debb07055015c59a9c",
+                "reference": "3c9ed2253fa5d9251d2238debb07055015c59a9c",
                 "shasum": ""
             },
             "require": {
@@ -613,6 +613,8 @@
                 "php": "^7.3"
             },
             "require-dev": {
+                "illuminate/cache": "^6.12",
+                "illuminate/filesystem": "^6.12",
                 "phpunit/phpunit": "^8.5"
             },
             "type": "library",
@@ -650,7 +652,7 @@
                 "netflex",
                 "query"
             ],
-            "time": "2020-01-22T14:52:37+00:00"
+            "time": "2020-01-22T23:52:42+00:00"
         },
         {
             "name": "netflex/support",
