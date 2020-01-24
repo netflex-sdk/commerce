@@ -7,15 +7,12 @@ date_default_timezone_set('Europe/Oslo');
 use Netflex\API\Providers\APIServiceProvider;
 use Dotenv\Dotenv;
 
-use Netflex\Commerce\CartItem;
-use Netflex\Commerce\LogItem;
 use Netflex\Commerce\Order;
 
 use Illuminate\Container\Container;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Facades\Cache;
 
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
