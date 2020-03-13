@@ -19,11 +19,13 @@
     }
   },
   "require": {
-    "netflex/api": "^2.0.0-RC2",
-    "netflex/support": "^2.0.0-RC2",
-    "netflex/query-builder": "^2.0.0-RC6",
+    "netflex/api": "^2.0",
+    "netflex/support": "^2.0",
+    "netflex/query-builder": "^2.0",
     "illuminate/support": "^7.0"
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require-dev": {
     "vlucas/phpdotenv": "^3.6",
     "larapack/dd": "^1.1",
