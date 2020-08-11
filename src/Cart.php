@@ -6,8 +6,8 @@ use Netflex\Support\ReactiveObject;
 
 /**
  * @property-read int $id
- * @property-read CartItem[] $items
- * @property-read ReservationItem[] $reservations
+ * @property-read CartItemCollection $items
+ * @property-read ReservationItemCollection $reservations
  * @property-read float $discount
  * @property-read float $tax
  * @property-read float $total

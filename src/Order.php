@@ -30,9 +30,9 @@ use Netflex\Commerce\Traits\API\OrderAPI;
  * @property string $user_agent
  * @property-read Cart $cart
  * @property-read Payments $payments
- * @property-read Data[] $data
+ * @property-read Data $data
  * @property-read LogItemCollection $log
- * @property-read Checkout[] $checkout
+ * @property-read Checkout $checkout
  * @property-read DiscountItemCollection $discounts
  */
 class Order extends ReactiveObject
