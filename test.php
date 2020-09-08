@@ -18,7 +18,7 @@ if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
 
-Dotenv::create(__DIR__)->load();
+Dotenv::createImmutable(__DIR__)->load();
 
 // Cache test setup
 $container = new Container;
