@@ -3,8 +3,11 @@
 namespace Netflex\Commerce\Traits\API;
 
 use Exception;
+
 use Netflex\API\Facades\API;
 use Netflex\Commerce\Exceptions\OrderNotFoundException;
+
+use Illuminate\Support\Facades\Session;
 
 trait OrderAPI
 {
@@ -76,11 +79,7 @@ trait OrderAPI
    */
   public function addToSession()
   {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-    }
-
-    $_SESSION[static::$sessionKey] = $this->secret;
+    Session::put(static::$sessionKey, $this->secret);
 
     return $this;
   }
@@ -90,11 +89,9 @@ trait OrderAPI
    */
   public function removeFromSession()
   {
-    if (session_status() == PHP_SESSION_NONE) {
-      session_start();
+    if (Session::has(static::$sessionKey)) {
+      Session::remove(static::$sessionKey);
     }
-
-    unset($_SESSION[static::$sessionKey]);
 
     return $this;
   }
@@ -219,9 +216,9 @@ trait OrderAPI
       static::$sessionKey = $key;
     }
 
-    if (isset($_SESSION[static::$sessionKey])) {
+    if (Session::has(static::$sessionKey)) {
       try {
-        $order = static::retrieveBySecret($_SESSION[static::$sessionKey]);
+        $order = static::retrieveBySecret(Session::get(static::$sessionKey));
       } catch (OrderNotFoundException $e) {
         $order = new static();
         $order->removeFromSession();
@@ -229,7 +226,7 @@ trait OrderAPI
       }
     } else {
       $order = new static();
-      $order->triedReceivedBySession = true;
+      $order->triedReceivedBySession = true;      
     }
 
     return $order;
