@@ -52,6 +52,8 @@ class Order extends ReactiveObject
 
   protected $triedReceivedBySession = false;
 
+  protected $respectPublishingStatus = false;
+
   protected $relation = 'order';
 
   protected $defaults = [
