@@ -22,7 +22,9 @@ trait CartItemAPI
     if (!empty($updates)) {
       API::put(Order::basePath() . $this->order_id . '/cart/' . $this->id, $updates);
 
-      $this->getRootParent()->forgetInCache();
+      if ($rootParent = $this->getRootParent()) {
+        $rootParent->forgetInCache();
+      }
     }
 
     $this->modified = [];
@@ -37,6 +39,8 @@ trait CartItemAPI
   {
     API::delete(Order::basePath() . $this->order_id . '/cart/' . $this->id);
 
-    $this->getRootParent()->forgetInCache();
+    if ($rootParent = $this->getRootParent()) {
+      $rootParent->forgetInCache();
+    }
   }
 }
