@@ -1,0 +1,13 @@
+### Composer files ###
+vendor
+
+### macOS ###
+.DS_Store
+
+### Other ###
+.idea
+.vscode
+
+### Development ###
+cache
+.env

@@ -1,0 +1,36 @@
+{
+  "name": "netflex/commerce",
+  "description": "Netflex Commerce library",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Alrek",
+      "email": "thomas@apility.no"
+    },
+    {
+      "name": "Tormund Gerhardsen",
+      "email": "tormund@apility.no"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Netflex\\Commerce\\": "src/"
+    }
+  },
+  "require": {
+    "netflex/api": "^2.0",
+    "netflex/support": "^2.0",
+    "netflex/query-builder": "^2.0",
+    "illuminate/support": "^7.0"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require-dev": {
+    "vlucas/phpdotenv": "^3.6",
+    "larapack/dd": "^1.1",
+    "illuminate/container": "^7.0",
+    "illuminate/cache": "^7.0",
+    "illuminate/filesystem": "^7.0"
+  }
+}
