@@ -15,7 +15,8 @@ class Properties extends ReactiveObject implements Arrayable
     /**
      * @return array
      */
-    public function jsonSerialize(): array
+    #[\ReturnTypeWillChange] 
+    public function jsonSerialize()
     {
         $attributes = empty($this->attributes) ? [] : $this->attributes;
 
