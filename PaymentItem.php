@@ -107,7 +107,6 @@ class PaymentItem extends ReactiveObject implements Payment
     /**
      * @return array
      */
-    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $json = parent::jsonSerialize();
