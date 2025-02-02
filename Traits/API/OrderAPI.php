@@ -5,6 +5,8 @@ namespace Netflex\Commerce\Traits\API;
 use Exception;
 
 use Netflex\API\Facades\API;
+use Netflex\Commerce\CartItem;
+use Netflex\Commerce\DiscountItem;
 use Netflex\Commerce\Exceptions\OrderNotFoundException;
 
 use Illuminate\Support\Facades\Session;
@@ -28,21 +30,20 @@ trait OrderAPI
      * @return static
      * @throws Exception
      */
-    public function save($payload = [])
+    public function save($attributes = [])
     {
         if ($this->fireModelEvent('saving') === false) {
             return $this;
         }
 
-        foreach ($this->modified as $modifiedKey) {
-            $payload[$modifiedKey] = $this->{$modifiedKey};
+        $this->data['_class'] ??= get_class($this);
+
+        foreach ($attributes as $attributeKey => $attribute) {
+          $this->{$attributeKey} = $attribute;
         }
 
-        $payload['data'] = $payload['data'] ?? [];
+        $payload = $this->toModifiedArray();
 
-        if (!($this->data['_class'] ?? false)) {
-            $payload['data']['_class'] = $payload['data']['_class'] ?? get_class($this);
-        }
         // Post new
         if (!$this->id) {
             if ($this->fireModelEvent('creating') === false) {
@@ -66,9 +67,27 @@ trait OrderAPI
 
             // Put updates
             if (!empty($payload)) {
-                API::put(static::basePath() . $this->id, $payload);
+                $uri = static::basePath() . $this->id;
+                $response = API::request(
+                    'put',
+                    $uri,
+                    [
+                        'json' => $payload,
+                        'headers' => [
+                            'Prefer' => [
+                                'update-behavior=full',
+                            ],
+                        ]
+                    ],
+                    true,
+                );
 
-                $this->forgetInCache();
+                foreach ($response as $key => $value) {
+                    $this->offsetUnset($key);
+                    $this->attributes[$key] = $value;
+                }
+
+                $this->addToCache();
             }
 
             $this->fireModelEvent('updated', false);
