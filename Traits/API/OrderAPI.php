@@ -5,8 +5,6 @@ namespace Netflex\Commerce\Traits\API;
 use Exception;
 
 use Netflex\API\Facades\API;
-use Netflex\Commerce\CartItem;
-use Netflex\Commerce\DiscountItem;
 use Netflex\Commerce\Exceptions\OrderNotFoundException;
 
 use Illuminate\Support\Facades\Session;
@@ -30,20 +28,21 @@ trait OrderAPI
      * @return static
      * @throws Exception
      */
-    public function save($attributes = [])
+    public function save($payload = [])
     {
         if ($this->fireModelEvent('saving') === false) {
             return $this;
         }
 
-        $this->data['_class'] ??= get_class($this);
-
-        foreach ($attributes as $attributeKey => $attribute) {
-          $this->{$attributeKey} = $attribute;
+        foreach ($this->modified as $modifiedKey) {
+            $payload[$modifiedKey] = $this->{$modifiedKey};
         }
 
-        $payload = $this->toModifiedArray();
+        $payload['data'] = $payload['data'] ?? [];
 
+        if (!($this->data['_class'] ?? false)) {
+            $payload['data']['_class'] = $payload['data']['_class'] ?? get_class($this);
+        }
         // Post new
         if (!$this->id) {
             if ($this->fireModelEvent('creating') === false) {
@@ -67,27 +66,9 @@ trait OrderAPI
 
             // Put updates
             if (!empty($payload)) {
-                $uri = static::basePath() . $this->id;
-                $response = API::request(
-                    'put',
-                    $uri,
-                    [
-                        'json' => $payload,
-                        'headers' => [
-                            'Prefer' => [
-                                'update-behavior=full',
-                            ],
-                        ]
-                    ],
-                    true,
-                );
+                API::put(static::basePath() . $this->id, $payload);
 
-                foreach ($response as $key => $value) {
-                    $this->offsetUnset($key);
-                    $this->attributes[$key] = $value;
-                }
-
-                $this->addToCache();
+                $this->forgetInCache();
             }
 
             $this->fireModelEvent('updated', false);
@@ -390,12 +371,12 @@ trait OrderAPI
             && static::$useCache
             && class_exists('Illuminate\Support\Facades\Cache')
         ) {
-            \Illuminate\Support\Facades\Cache::put(
+            \Illuminate\Support\Facades\Cache::add(
                 static::$cacheBaseKey . '/' . $this->id,
                 $this->attributes,
                 static::$cacheTTL
             );
-            \Illuminate\Support\Facades\Cache::put(
+            \Illuminate\Support\Facades\Cache::add(
                 static::$cacheBaseKey . '/' . $this->secret,
                 $this->attributes,
                 static::$cacheTTL
