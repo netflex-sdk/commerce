@@ -2,13 +2,11 @@
 
 namespace Netflex\Commerce;
 
-use Illuminate\Support\Collection;
-use Netflex\Commerce\Traits\Reactivity\HasReactiveChildrenProperties;
 use Netflex\Support\ReactiveObject;
 
 /**
  * @property-read int $id
- * @property CartItemCollection $items
+ * @property-read CartItemCollection $items
  * @property-read ReservationItemCollection $reservations
  * @property-read float $discount
  * @property-read float $tax
@@ -20,8 +18,6 @@ use Netflex\Support\ReactiveObject;
  */
 class Cart extends ReactiveObject
 {
-  use HasReactiveChildrenProperties;
-
   protected $defaults = [
     'sub_total' => 0,
     'discount' => 0,
@@ -45,16 +41,12 @@ class Cart extends ReactiveObject
     'reservations'
   ];
 
-  protected ?CartItemCollection $itemsInstance;
-
-  public function setItemsAttribute(Collection|array|null $items): void
+  /**
+   * @param mixed $items
+   * @return CartItemCollection
+   */
+  public function getItemsAttribute($items = [])
   {
-    $this->setItemCollection($items, 'items', 'itemsInstance');
-  }
-
-  public function getItemsAttribute(
-    array|null $items = null,
-  ): CartItemCollection {
     if (!empty($items)) {
       $items = array_map(function ($item) {
         if (is_array($item)) {
@@ -66,27 +58,21 @@ class Cart extends ReactiveObject
       }, $items);
     }
 
-    return $this->getItemCollection(
-      $items,
-      CartItemCollection::class,
-      'items',
-      'itemsInstance',
-    );
+    return CartItemCollection::factory($items, $this)
+      ->addHook('modified', function ($items) {
+        $this->__set('items', $items->jsonSerialize());
+      });
   }
-
-  protected ?ReservationItemCollection $reservationsInstance;
 
   /**
    * @param mixed $items
    * @return ReservationItemCollection
    */
-  public function getReservationsAttribute(array|null $items = null)
+  public function getReservationsAttribute($items = [])
   {
-    return $this->getItemCollection(
-      $items,
-      ReservationItemCollection::class,
-      'reservations',
-      'reservationsInstance',
-    );
+    return ReservationItemCollection::factory($items, $this)
+      ->addHook('modified', function ($items) {
+        $this->__set('reservations', $items->jsonSerialize());
+      });
   }
 }
