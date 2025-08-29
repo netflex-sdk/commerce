@@ -3,7 +3,6 @@
 namespace Netflex\Commerce;
 
 use Carbon\Carbon;
-use Netflex\Commerce\Traits\Reactivity\HasReactiveChildrenProperties;
 use Netflex\Support\ReactiveObject;
 use Netflex\Commerce\Traits\API\CartItemAPI;
 use Netflex\Structure\Traits\Localizable;
@@ -41,13 +40,12 @@ use Netflex\Commerce\Contracts\Discount;
  * @property-read float $original_entries_total
  * @property-read float $original_entries_cost
  * @property-read float $original_tax_cost
- * @property-read int $order_id
+ * @property-read id $order_id
  */
 class CartItem extends ReactiveObject implements CartItemContract
 {
   use CartItemAPI;
   use Localizable;
-  use HasReactiveChildrenProperties;
 
   protected $readOnlyAttributes = [
     'id',
@@ -153,22 +151,16 @@ class CartItem extends ReactiveObject implements CartItemContract
     return (float) $value;
   }
 
-  protected ?Properties $propertiesInstance;
-
-  public function setPropertiesAttribute(object|array|null $properties): void
+  /**
+   * @param mixed $properties
+   * @return Properties
+   */
+  public function getPropertiesAttribute($properties)
   {
-    $this->setReactiveObject($properties, 'properties', 'propertiesInstance');
-  }
-
-  public function getPropertiesAttribute(
-    object|array|null $properties = null
-  ): Properties {
-    return $this->getReactiveObject(
-      $properties,
-      Properties::class,
-      'properties',
-      'propertiesInstance',
-    );
+    return Properties::factory($properties, $this)
+      ->addHook('modified', function ($properties) {
+        $this->__set('properties', $properties->jsonSerialize());
+      });
   }
 
   /**
@@ -183,7 +175,6 @@ class CartItem extends ReactiveObject implements CartItemContract
   /**
    * @return array
    */
-  #[\ReturnTypeWillChange]
   public function jsonSerialize()
   {
     $json = parent::jsonSerialize();

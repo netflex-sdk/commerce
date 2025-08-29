@@ -2,18 +2,17 @@
 
 namespace Netflex\Commerce;
 
+use Apility\Payment\Jobs\SendReceipt;
 use Carbon\Carbon;
 use DateTimeInterface;
 
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Netflex\Commerce\Contracts\CartItem;
 use Netflex\Commerce\Contracts\Order as OrderContract;
 use Netflex\Commerce\Exceptions\CartNotMutableException;
-use Netflex\Commerce\Traits\Reactivity\HasReactiveChildrenProperties;
 use Netflex\Query\Traits\HasRelation;
 use Netflex\Query\Traits\ModelMapper;
 use Netflex\Query\Traits\Queryable;
@@ -42,17 +41,17 @@ use TypeError;
  * @property boolean $abandoned
  * @property boolean $abandoned_reminder_sent
  * @property string $abandoned_reminder_mail
+ * @property-read Register $register
  * @property string $status
  * @property string $type
  * @property string $ip
  * @property string $user_agent
- * @property Register $register
- * @property Cart $cart
- * @property Payments $payments
- * @property Data $data
- * @property LogItemCollection $log
- * @property Checkout $checkout
- * @property DiscountItemCollection $discounts
+ * @property-read Cart $cart
+ * @property-read Payments $payments
+ * @property-read Data $data
+ * @property-read LogItemCollection $log
+ * @property-read Checkout $checkout
+ * @property-read DiscountItemCollection $discounts
  */
 class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
 {
@@ -61,7 +60,8 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     use HasRelation;
     use ModelMapper;
     use HasEvents;
-    use HasReactiveChildrenProperties;
+
+
 
     /**
      * The event dispatcher instance.
@@ -245,131 +245,85 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
         return (bool)$sent;
     }
 
-
-    protected ?Register $registerInstance;
-
-    public function setRegisterAttribute(object|array|null $register): void
+    /**
+     * @param object|array|null $register
+     * @return Register
+     */
+    public function getRegisterAttribute($register)
     {
-        $this->setReactiveObject($register, 'register', 'registerInstance');
+        return Register::factory($register, $this);
     }
 
-    public function getRegisterAttribute(object|array|null $register = null): Register
+    /**
+     * @param object|array|null $cart
+     * @return Cart
+     */
+    public function getCartAttribute($cart = [])
     {
-        return $this->getReactiveObject(
-            $register,
-            Register::class,
-            'register',
-            'registerInstance',
-        );
+        return Cart::factory($cart, $this)
+            ->addHook('modified', function (Cart $cart) {
+                $this->__set('cart', $cart->jsonSerialize());
+            });
     }
 
-    protected ?Cart $cartInstance;
-
-    public function setCartAttribute(object|array|null $cart): void
+    /**
+     * @param object|array|null $data
+     * @return Data
+     */
+    public function getDataAttribute($data = [])
     {
-        $this->setReactiveObject($cart, 'cart', 'cartInstance');
-    }
-
-    public function getCartAttribute(object|array|null $cart = null): Cart
-    {
-        return $this->getReactiveObject($cart, Cart::class, 'cart', 'cartInstance');
-    }
-
-    protected ?Data $dataInstance;
-
-    public function setDataAttribute(object|array|null $data): void
-    {
-        $this->setReactiveObject($data, 'data', 'dataInstance');
-    }
-
-    public function getDataAttribute(object|array|null $data = null): Data
-    {
-        return $this->getReactiveObject(
-            $data,
-            Data::class,
-            'data',
-            'dataInstance',
-        );
-    }
-
-    protected ?Payments $paymentsInstanc;
-
-    public function setPaymentsAttribute(object|array|null $payments): void
-    {
-        $this->setReactiveObject($payments, 'payments', 'paymentsInstance');
+        return Data::factory($data, $this)
+            ->addHook('modified', function (Data $data) {
+                $this->__set('data', $data->jsonSerialize());
+            });
     }
 
     /**
      * @param object|array|null $payments
      * @return Payments
      */
-    public function getPaymentsAttribute(
-        object|array|null $payments = null,
-    ): Payments {
-        return $this->getReactiveObject(
-            $payments,
-            Payments::class,
-            'payments',
-            'paymentsInstance',
-        );
-    }
-
-    protected ?Checkout $checkoutInstance;
-
-    public function setCheckoutAttribute(object|array|null $checkout): void
+    public function getPaymentsAttribute($payments = null)
     {
-        $this->setReactiveObject($checkout, 'checkout', 'checkoutInstance');
+        return Payments::factory($payments, $this)
+            ->addHook('modified', function (Payments $payments) {
+                $this->__set('payments', $payments->jsonSerialize());
+            });
     }
 
-    public function getCheckoutAttribute(
-        object|array|null $checkout = null,
-    ): Checkout {
-        return $this->getReactiveObject(
-            $checkout,
-            Checkout::class,
-            'checkout',
-            'checkoutInstance',
-        );
-    }
-
-    protected ?DiscountItemCollection $discountsInstance;
-
-    public function setDiscountsAttribute(
-        Collection|array|null $discounts,
-    ): void {
-        $this->setItemCollection($discounts, 'discounts', 'discountsInstance');
-    }
-
-    public function getDiscountsAttribute(
-        array|null $discounts = null,
-    ): DiscountItemCollection {
-        return $this->getItemCollection(
-            $discounts,
-            DiscountItemCollection::class,
-            'discounts',
-            'discountsInstance',
-        );
-    }
-
-    protected ?LogItemCollection $logInstance;
-
-    public function setLogAttribute(Collection|array|null $log): void
+    /**
+     * @param object|array|null $checkout
+     * @return Checkout
+     */
+    public function getCheckoutAttribute($checkout = null)
     {
-        $this->setItemCollection($log, 'log', 'logInstance');
+        return Checkout::factory($checkout, $this)
+            ->addHook('modified', function (Checkout $checkout) {
+                $this->__set('checkout', $checkout->jsonSerialize());
+            });
+    }
+
+    /**
+     * @param array|null $discounts
+     * @return DiscountItemCollection
+     */
+    public function getDiscountsAttribute($discounts = [])
+    {
+        return DiscountItemCollection::factory($discounts, $this)
+            ->addHook('modified', function (DiscountItemCollection $discounts) {
+                $this->__set('discounts', $discounts->jsonSerialize());
+            });
     }
 
     /**
      * @param array|null $log
      * @return LogItemCollection
      */
-    public function getLogAttribute(array|null $log = []): LogItemCollection
+    public function getLogAttribute($log = [])
     {
-        return $this->getItemCollection(
-            $log,
-            LogItemCollection::class,
-            'log',
-            'logInstance',
-        );
+        return LogItemCollection::factory($log, $this)
+            ->addHook('modified', function (LogItemCollection $log) {
+                $this->__set('log', $log->jsonSerialize());
+            });
     }
 
     /**
@@ -568,9 +522,9 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     public function getPaymentMethod(): ?string
     {
         return collect($this->getOrderPayments())
-            ->reject(fn (Payment $p) => $p->getIsPending())
-            ->reject(fn (Payment $p) => $p->getPaymentAmount() == 0)
-            ->map(fn (Payment $p) => $p->getCardType())
+            ->reject(fn(Payment $p) => $p->getIsPending())
+            ->reject(fn(Payment $p) => $p->getPaymentAmount() == 0)
+            ->map(fn(Payment $p) => $p->getCardType())
             ->unique()
             ->filter()
             ->join(", ");
@@ -645,7 +599,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     public function isCartMutable(): bool
     {
         return !$this->isLocked() && collect($this->getOrderPayments())
-            ->reject(fn (Payment $payment) => $payment->getIsPending())
+            ->reject(fn(Payment $payment) => $payment->getIsPending())
             ->count() === 0;
     }
 
@@ -666,7 +620,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     {
         $this->logPaymentChange('Updating', $payment);
         $updatePayment = collect($this->getOrderPayments())
-            ->first(fn (Payment $existingPayment) => $existingPayment->getTransactionId() === $payment->getTransactionId());
+            ->first(fn(Payment $existingPayment) => $existingPayment->getTransactionId() === $payment->getTransactionId());
 
         if ($updatePayment) {
             /** @var PaymentItem $updatePayment */
@@ -693,7 +647,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     {
         $this->logPaymentChange('Deleting', $payment);
         $deletePayment = $this->getOrderPayments()
-            ->first(fn (Payment $existingPayment) => $existingPayment->getTransactionId() === $payment->getTransactionId());
+            ->first(fn(Payment $existingPayment) => $existingPayment->getTransactionId() === $payment->getTransactionId());
 
         if ($deletePayment) {
             /** @var PaymentItem $deletePayment */
@@ -751,14 +705,5 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
         $this->registerOrder();
         $this->lockOrder();
         $this->refreshOrder();
-    }
-
-    public function toModifiedArray(): array
-    {
-      $modified = parent::toModifiedArray();
-
-      unset($modified['id']);
-
-      return $modified;
     }
 }
