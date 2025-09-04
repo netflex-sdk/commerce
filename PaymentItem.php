@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 
 use Netflex\Commerce\Contracts\Payment;
 use Netflex\Commerce\Traits\API\PaymentItemAPI;
+use Netflex\Commerce\Traits\Reactivity\HasReactiveChildrenProperties;
 use Netflex\Support\ReactiveObject;
 
 /**
@@ -25,6 +26,7 @@ use Netflex\Support\ReactiveObject;
 class PaymentItem extends ReactiveObject implements Payment
 {
     use PaymentItemAPI;
+    use HasReactiveChildrenProperties;
 
     protected $readOnlyAttributes = [
         'id',
@@ -70,6 +72,8 @@ class PaymentItem extends ReactiveObject implements Payment
         if ($this->data->card_expiry ?? null) {
             return Carbon::parse($this->data->card_expiry);
         }
+
+        return null;
     }
 
     public function getPaymentAmount(): float
@@ -92,16 +96,26 @@ class PaymentItem extends ReactiveObject implements Payment
         return (float)$value;
     }
 
-    /**
-     * @param mixed $data
-     * @return Properties
-     */
-    public function getDataAttribute($data)
+    protected ?Properties $propertiesInstance;
+
+    public function setPropertiesAttribute(object|array|null $properties): void
     {
-        return Properties::factory($data, $this)
-            ->addHook('modified', function ($data) {
-                $this->__set('data', $data->jsonSerialize());
-            });
+        $this->setReactiveObject(
+            $properties,
+            'properties',
+            'propertiesInstance',
+        );
+    }
+
+    public function getPropertiesAttribute(
+        object|array|null $properties = null
+    ): Properties {
+        return $this->getReactiveObject(
+            $properties,
+            Properties::class,
+            'properties',
+            'propertiesInstance',
+        );
     }
 
     /**
