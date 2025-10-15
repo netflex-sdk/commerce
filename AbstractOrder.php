@@ -63,14 +63,6 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     use HasEvents;
     use HasReactiveChildrenProperties;
 
-    const string REGISTER_CLASS = Register::class;
-    const string CART_CLASS = Cart::class;
-    const string DATA_CLASS = Data::class;
-    const string PAYMENTS_CLASS = Payments::class;
-    const string CHECKOUT_CLASS = Checkout::class;
-    const string DISCOUNT_ITEM_COLLECTION_CLASS = DiscountItemCollection::class;
-    const string LOG_ITEM_COLLECTION_CLASS = LogItemCollection::class;
-
     /**
      * The event dispatcher instance.
      *
@@ -265,7 +257,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     {
         return $this->getReactiveObject(
             $register,
-            static::REGISTER_CLASS,
+            Register::class,
             'register',
             'registerInstance',
         );
@@ -280,12 +272,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
 
     public function getCartAttribute(object|array|null $cart = null): Cart
     {
-        return $this->getReactiveObject(
-            $cart,
-            static::CART_CLASS,
-            'cart',
-            'cartInstance',
-        );
+        return $this->getReactiveObject($cart, Cart::class, 'cart', 'cartInstance');
     }
 
     protected ?Data $dataInstance;
@@ -299,7 +286,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     {
         return $this->getReactiveObject(
             $data,
-            static::DATA_CLASS,
+            Data::class,
             'data',
             'dataInstance',
         );
@@ -321,7 +308,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     ): Payments {
         return $this->getReactiveObject(
             $payments,
-            static::PAYMENTS_CLASS,
+            Payments::class,
             'payments',
             'paymentsInstance',
         );
@@ -339,7 +326,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     ): Checkout {
         return $this->getReactiveObject(
             $checkout,
-            static::CHECKOUT_CLASS,
+            Checkout::class,
             'checkout',
             'checkoutInstance',
         );
@@ -358,7 +345,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     ): DiscountItemCollection {
         return $this->getItemCollection(
             $discounts,
-            static::DISCOUNT_ITEM_COLLECTION_CLASS,
+            DiscountItemCollection::class,
             'discounts',
             'discountsInstance',
         );
@@ -379,7 +366,7 @@ class AbstractOrder extends ReactiveObject implements OrderContract, UrlRoutable
     {
         return $this->getItemCollection(
             $log,
-            static::LOG_ITEM_COLLECTION_CLASS,
+            LogItemCollection::class,
             'log',
             'logInstance',
         );

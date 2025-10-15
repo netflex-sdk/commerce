@@ -49,8 +49,6 @@ class CartItem extends ReactiveObject implements CartItemContract
   use Localizable;
   use HasReactiveChildrenProperties;
 
-  const string PROPERTIES_CLASS = Properties::class;
-
   protected $readOnlyAttributes = [
     'id',
     'tax_cost',
@@ -167,7 +165,7 @@ class CartItem extends ReactiveObject implements CartItemContract
   ): Properties {
     return $this->getReactiveObject(
       $properties,
-      static::PROPERTIES_CLASS,
+      Properties::class,
       'properties',
       'propertiesInstance',
     );

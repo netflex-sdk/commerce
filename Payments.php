@@ -14,8 +14,6 @@ class Payments extends ReactiveObject
 {
   use HasReactiveChildrenProperties;
 
-  const string PAYMENT_ITEM_COLLECTION_CLASS = PaymentItemCollection::class;
-
   protected $defaults = [
     'total' => 0,
     'items' => []
@@ -38,7 +36,7 @@ class Payments extends ReactiveObject
   ): PaymentItemCollection {
     return $this->getItemCollection(
       $items,
-      static::PAYMENT_ITEM_COLLECTION_CLASS,
+      PaymentItemCollection::class,
       'items',
       'itemsInstance',
     );
