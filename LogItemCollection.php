@@ -7,5 +7,5 @@ use Netflex\Support\ItemCollection;
 /** @extends ItemCollection<array-key, LogItem> */
 class LogItemCollection extends ItemCollection
 {
-  protected static $type = LogItem::class;
+  protected static string $type = LogItem::class;
 }

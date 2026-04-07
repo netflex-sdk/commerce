@@ -7,5 +7,5 @@ use Netflex\Support\ItemCollection;
 /** @extends ItemCollection<array-key, DiscountItem> */
 class DiscountItemCollection extends ItemCollection
 {
-  protected static $type = DiscountItem::class;
+  protected static string $type = DiscountItem::class;
 }
