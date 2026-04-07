@@ -49,6 +49,7 @@ class CartItem extends ReactiveObject implements CartItemContract
   use Localizable;
   use HasReactiveChildrenProperties;
 
+  /** @var class-string<Properties> */
   const string PROPERTIES_CLASS = Properties::class;
 
   protected $readOnlyAttributes = [
@@ -179,7 +180,7 @@ class CartItem extends ReactiveObject implements CartItemContract
    */
   public function getDiscountDataAttribute($data)
   {
-    return DiscountData::factory($data, $this);
+    return new DiscountData($data, $this, false);
   }
 
   /**
