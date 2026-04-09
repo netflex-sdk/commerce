@@ -187,7 +187,7 @@ class CartItem extends ReactiveObject implements CartItemContract
    * @return array
    */
   #[\ReturnTypeWillChange]
-  public function jsonSerialize()
+  public function jsonSerialize(): array
   {
     $json = parent::jsonSerialize();
     $json['properties'] = $this->properties->jsonSerialize();
