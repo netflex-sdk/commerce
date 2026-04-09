@@ -8,7 +8,7 @@ use Netflex\Support\ReactiveObject;
 
 class Properties extends ReactiveObject implements Arrayable
 {
-  protected $readOnlyAttributes = [];
+  protected array $readOnlyAttributes = [];
 
   use Localizable;
 
